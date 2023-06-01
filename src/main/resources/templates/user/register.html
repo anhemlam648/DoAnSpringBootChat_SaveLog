@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <th:block th:replace="~{layout :: Link-css}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{layout :: header}"></th:block>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <h3 class="card-title text-center">Sign Up</h3>
+            <form th:action="@{/register}" th:object="${user}" method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label">First Name:</label><span class="text-danger">*</span>
+                    <input type="text" class="form-control" th:field="*{name}" id="name">
+                    <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" th:field="*{email}" id="email">
+                    <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username:</label><span class="text-danger">*</span>
+                    <input type="text" class="form-control" id="username" th:field="*{username}">
+                    <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label><span class="text-danger">*</span>
+                    <input type="password" class="form-control" id="password" th:field="*{password}">
+                    <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-info">Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{layout :: footer}"></th:block>
+</body>
+</html>
