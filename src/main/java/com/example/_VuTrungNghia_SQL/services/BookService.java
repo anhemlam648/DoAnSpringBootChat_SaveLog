@@ -22,6 +22,10 @@ public class BookService {
         Optional<Book> optional = bookRepository.findById(id);
         return optional.orElse(null);
     }
+    public List<Book> searchBooks(String keyword) {
+        return bookRepository.searchBooks(keyword.toLowerCase());
+    }
+
     public void addBook(Book book){
         bookRepository.save(book);
     }

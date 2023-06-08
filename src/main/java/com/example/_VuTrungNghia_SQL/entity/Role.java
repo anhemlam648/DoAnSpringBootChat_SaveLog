@@ -10,17 +10,18 @@ import java.util.Set;
 @Table(name ="role")
 public class Role {
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = 50, message = "Name must be less than 50 characters")
+    @Size(max = 50,message = "Name must be less than 50 characters")
     @NotBlank(message = "Name is required")
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(name = "name",length = 50,nullable = false)
     private String name;
 
     @Size(max = 250, message = "Description must be less than 250 characters")
-    @Column(name = "description", length = 250)
+    @Column(name = "description",length = 250)
     private String description;
+
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();

@@ -15,13 +15,13 @@ public class CustomUserDetailService implements UserDetailsService {
 
 
     @Autowired
-    private IuserRepository iuserRepository;
-
+    private   IuserRepository iuserRepository;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username ) throws UsernameNotFoundException
+    {
         User user = iuserRepository.findByUsername(username);
-        if(user == null)
-            throw new UsernameNotFoundException("User not found");
-        return new CustomUserDetail(user, iuserRepository);
+        if (user == null)
+            throw  new UsernameNotFoundException("User not found");
+        return new CustomUserDetail(user,iuserRepository);
     }
 }

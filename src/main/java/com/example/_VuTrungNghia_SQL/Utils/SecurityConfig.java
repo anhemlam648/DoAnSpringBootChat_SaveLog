@@ -35,42 +35,28 @@ public class SecurityConfig {
             Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/css/**", "/js/**", "/", "/register",
-                                "/error")
+                        .requestMatchers( "/css/**", "/js/**", "/", "/register", "/error")
                         .permitAll()
-
-                        .requestMatchers( "/books/edit", "/books/delete")
-
-                        .authenticated()
-
-                        .requestMatchers("/books", "/books/add")
-
-                        .authenticated()
-
+                        .requestMatchers(  "/books/delete","/books/edit").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/books","/books/add").hasAnyAuthority("ADMIN","USER")
                         .anyRequest().authenticated()
-
                 )
                 .logout(logout -> logout.logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
-
                         .permitAll()
-
                 )
                 .formLogin(formLogin -> formLogin.loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/")
-
                         .permitAll()
-
                 )
                 .rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret")
                         .tokenValiditySeconds(86400)
                         .userDetailsService(userDetailsService())
-                )
-                .exceptionHandling(exceptionHandling ->
+                ).exceptionHandling(exceptionHandling ->
                         exceptionHandling.accessDeniedPage("/403"))
                 .build();
     }

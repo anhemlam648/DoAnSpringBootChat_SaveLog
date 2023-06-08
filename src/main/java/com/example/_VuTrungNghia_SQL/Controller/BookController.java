@@ -1,11 +1,14 @@
 package com.example._VuTrungNghia_SQL.Controller;
 
+import com.example._VuTrungNghia_SQL.daos.Item;
 import com.example._VuTrungNghia_SQL.entity.Book;
 import com.example._VuTrungNghia_SQL.entity.Category;
 import com.example._VuTrungNghia_SQL.repository.IBookRepository;
 import com.example._VuTrungNghia_SQL.repository.ICategoryRepository;
 import com.example._VuTrungNghia_SQL.services.BookService;
+import com.example._VuTrungNghia_SQL.services.CartService;
 import com.example._VuTrungNghia_SQL.services.CategoryService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +33,9 @@ public class BookController {
     private IBookRepository bookRepository;
     @Autowired
     private ICategoryRepository categoryRepository;
+
+    @Autowired
+    private CartService cartService;
     @GetMapping
     public String showAllBooks(Model model){
         List<Book> books = bookService.getAllBooks();
@@ -85,6 +91,24 @@ public class BookController {
         bookService.deleteBook(id);
         return "redirect:/books";
     }
-
+    @GetMapping("/search")
+    public String searchBooks(@RequestParam("keyword") String keyword, Model model) {
+        List<Book> books = bookService.searchBooks(keyword);
+        model.addAttribute("book", books);
+        model.addAttribute("keyword", keyword);
+        return "book/list";
+    }
+    @PostMapping("/add-to-cart")
+    public String addToCart(HttpSession session,
+                            @RequestParam long id,
+                            @RequestParam String name,
+                            @RequestParam double price,
+                            @RequestParam(defaultValue = "1") int quantity)
+    {
+        var cart = cartService.getCart(session);
+        cart.addItems(new Item(id, name, price, quantity));
+        cartService.updateCart(session, cart);
+        return "redirect:/books";
+    }
 
 }

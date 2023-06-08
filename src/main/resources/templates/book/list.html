@@ -1,6 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/schema/security"
+      lang="en">
 <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('input[name="keyword"]').on('input', function() {
+                var keyword = $(this).val();
+                if (keyword.trim().length > 0) {
+                    getAutocompleteResults(keyword);
+                } else {
+                    hideAutocomplete();
+                }
+            });
+
+            function getAutocompleteResults(keyword) {
+                $.ajax({
+                    url: '/books/search-suggestions',
+                    type: 'GET',
+                    data: {keyword: keyword},
+                    success: function(response) {
+                        showAutocomplete(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            function showAutocomplete(results) {
+                var autocompleteContainer = $('#autocompleteContainer');
+                autocompleteContainer.empty();
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    var div = $('<div></div>');
+                    div.text(result);
+                    div.addClass('autocomplete-item');
+                    div.on('click', function() {
+                        var selectedValue = $(this).text();
+                        $('input[name="keyword"]').val(selectedValue);
+                        hideAutocomplete();
+                    });
+                    autocompleteContainer.append(div);
+                }
+            }
+
+            function hideAutocomplete() {
+                $('#autocompleteContainer').empty();
+            }
+        });
+    </script>
     <meta charset="UTF-8">
     <title>My Book List</title>
     <th:block th:replace="Layout :: Link-css"></th:block>
@@ -11,12 +61,20 @@
     <h1 th:text="${title}"></h1>
     <table class="table">
         <tr>
+            <form th:action="@{/books/search}" method="GET" class="mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="keyword" placeholder="Search by title or category">
+                    <div id="autocompleteContainer"></div>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
             <th>ID</th>
             <th>Title</th>
             <th>Author</th>
             <th>Price</th>
             <th>Category</th>
             <th>Action</th>
+            <td sec:authorize="hasAnyAuthority('ADMIN')">
         </tr>
         <tr th:each="book : ${book}">
             <td th:text="${book.id}"></td>
@@ -24,13 +82,39 @@
             <td th:text="${book.author}"></td>
             <td th:text="${book.price}"></td>
             <td th:text="${book.category.name}"></td>
+            <div sec:authorize="hasAnyAuthority('ADMIN')">
             <td>
                 <a th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a> |
                 <a th:href="@{/books/delete/{id}(id=${book.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+                <form th:action="@{/books/add-to-cart}" method="post" class="d-inline">
+                <input type="hidden" name="id" th:value="${book.getId()}">
+                <input type="hidden" name="name"th:value="${book.getTitle()}">
+                    <input type="hidden" name="price" th:value="${book.getPrice()}">
+                    <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to add this book to cart?')">Add to cart</button>
+                </form>
             </td>
+            </div>
         </tr>
     </table>
 </div>
+<script th:src="@{/js/jquery-3.5.1.min.js}"></script>
+<script th:inline="javascript">
+    function deleteBook(link){
+    if (confirm('Are you sure')){
+    $.ajax({
+        url: $(link).attr('href'),
+        type: 'DELETE'
+        success: result => {
+            if (!result.success){
+             alert(result.message);
+             }else{
+             $(link).parent().parent().remove();
+             }
+           }
+        });
+      }
+    }
+</script>
 <th:block th:replace="Layout :: footer"></th:block>
 </body>
 </html>
