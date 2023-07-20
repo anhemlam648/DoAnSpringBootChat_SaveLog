@@ -50,6 +50,7 @@
       <h3>Total: <span th:text="${totalPrice}"></span></h3>
     </div>
     <div class="col-md-12 text-center">
+      <a class="btn btn-success" th:href="@{/cart/updateCart/{id}/{quantity}}" onchange="functionupdateCartItem(event)">update</a>
       <a class="btn btn-success" th:href="@{/cart/checkout}">Checkout</a>
       <a class="btn btn-danger" th:href="@{/cart/clearCart}">Clear Cart</a>
     </div>
@@ -68,5 +69,21 @@
 </div>
 <div th:replace="layout :: footer"></div>
 <script th:src="@{/js/cart.js}"></script>
+<script th:inline="javascript">
+  function updateCartItem(event) {
+  event.preventDefault();
+
+  var cartItemId = event.target.getAttribute('data-id');
+  var newQuantity = document.querySelector('.quantity[data-id="' + cartItemId + '"]').value;
+
+ $.ajax({url: '/cart/updateCart/' + id + '/' + quantity
+    .then(function(response) {
+
+    })
+    .catch(function(error) {
+
+    });
+}
+</script>
 </body>
 </html>
