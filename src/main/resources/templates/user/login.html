@@ -12,7 +12,6 @@
 <div class="container">
     <div class="col-lg-6 col-md-8">
         <h3 class="card-title text-center">Login</h3>
-        <a th:href="@{/oauth2/authorization/google}">Login with Google</a>
         <form th:action="@{/login}" method="post">
             <fieldset>
                 <legend>Please login</legend>
@@ -37,6 +36,19 @@
                 <div class="d-grid gap-2 form-action">
                     <button type="submit" class="btn btn-primary">Login</button>
                     <a class="text-primary text-center" href="/register">Don't have account. Sign up?</a>
+                </div>
+                <hr>
+                <p style="display: flex; align-items: center; justify-content: center;">
+                    hoặc đăng nhập bằng
+                </p>
+                <hr>
+                <div class="center">
+                    <a th:href="@{/oauth2/authorization/google}" class="google-login" style="display: flex; align-items: center; justify-content: center;">
+                        <div style="display: flex; align-items: center;">
+                            <img src="https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png" style="width: 30px; margin-right: 10px;" class="login-gg-fb__icon">
+                            <p class="login-gg-fb__text">Google</p>
+                        </div>
+                    </a>
                 </div>
             </fieldset>
         </form>
