@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <th:block th:replace="~{layout :: Link-css}"></th:block>
+    <style>
+        /* Định dạng cho container chính */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Đảm bảo nội dung căn giữa theo chiều dọc */
+        }
+
+        /* Định dạng cho các phần tử trong form */
+        label {
+            margin-right: 10px; /* Khoảng cách giữa label và input */
+        }
+
+        input[type="text"] {
+            padding: 5px;
+        }
+
+        button[type="submit"] {
+            margin-top: 10px;
+            padding: 5px 15px; /* Điều chỉnh kích thước của nút */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="col-lg-6 col-md-8">
+        <form th:action="@{/otp-verification}" method="post">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div>
+                        <label for="otpCode">Nhập mã OTP:</label>
+                        <input type="text" id="otpCode" name="otpCode" required>
+                    </div>
+                    <div>
+                        <input type="hidden" name="email" th:value="${user.username}">
+                        <button type="submit">Xác thực</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block th:replace="~{layout :: footer}"></th:block>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>My Categories</title>
+  <th:block th:replace="Layout :: Link-css"></th:block>
+</head>
+<body>
+<th:block th:replace="Layout :: header"></th:block>
+<div class="container">
+  <h1 th:text="${title}"></h1>
+  <table class="table">
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Ngaysinh</th>
+      <th>Gioitinh</th>
+    </tr>
+    <tr th:each="user : ${users}">
+      <td th:text="${user.id}"></td>
+      <td th:text="${user.username}"></td>
+      <td th:text="${user.email}"></td>
+      <td th:text="${user.name}"></td>
+      <td th:text="${user.Ngaysinh}"></td>
+      <td th:text="${user.Gioitinh}"></td>
+      <td>
+        <a th:href="@{/show/edit/{id}(id=${user.id})}">Edit</a> |
+        <a th:href="@{/show/delete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+      </td>
+    </tr>
+  </table>
+</div>
+<th:block th:replace="Layout :: footer"></th:block>
+</body>
+</html>

@@ -21,8 +21,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email:</label>
-                    <input type="email" class="form-control" th:field="*{email}" id="email">
-                    <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                    <input type="email" class="form-control" th:field="*{email}" id="email" required>
                 </div>
                 <div class="mb-3">
                     <label for="username" class="form-label">Username:</label><span class="text-danger">*</span>
@@ -33,6 +32,19 @@
                     <label for="password" class="form-label">Password:</label><span class="text-danger">*</span>
                     <input type="password" class="form-control" id="password" th:field="*{password}">
                     <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="Ngaysinh" class="form-label">Date of Birth:</label><span class="text-danger">*</span>
+                    <input type="date" class="form-control" id="Ngaysinh" th:field="*{Ngaysinh}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('Ngaysinh')}" th:errors="*{Ngaysinh}"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="Gioitinh" class="form-label">Gender:</label><span class="text-danger">*</span>
+                    <select class="form-control" id="Gioitinh" th:field="*{Gioitinh}">
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
+                    <span class="text-danger" th:if="${#fields.hasErrors('Gioitinh')}" th:errors="*{Gioitinh}"></span>
                 </div>
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-info">Sign Up</button>

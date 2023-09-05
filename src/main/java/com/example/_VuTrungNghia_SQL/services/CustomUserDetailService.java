@@ -1,5 +1,6 @@
 package com.example._VuTrungNghia_SQL.services;
 
+
 import com.example._VuTrungNghia_SQL.entity.CustomUserDetail;
 import com.example._VuTrungNghia_SQL.entity.User;
 import com.example._VuTrungNghia_SQL.repository.IuserRepository;
@@ -9,19 +10,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class CustomUserDetailService implements UserDetailsService {
 
-
     @Autowired
-    private   IuserRepository iuserRepository;
+    private IuserRepository userRepository;
     @Override
-    public UserDetails loadUserByUsername(String username ) throws UsernameNotFoundException
-    {
-        User user = iuserRepository.findByUsername(username);
-        if (user == null)
-            throw  new UsernameNotFoundException("User not found");
-        return new CustomUserDetail(user,iuserRepository);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+        return new CustomUserDetail(user, userRepository);
     }
 }

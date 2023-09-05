@@ -12,6 +12,7 @@
 <div class="container">
     <div class="col-lg-6 col-md-8">
         <h3 class="card-title text-center">Login</h3>
+        <a th:href="@{/oauth2/authorization/google}">Login with Google</a>
         <form th:action="@{/login}" method="post">
             <fieldset>
                 <legend>Please login</legend>

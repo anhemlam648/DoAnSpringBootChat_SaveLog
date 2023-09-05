@@ -1,6 +1,9 @@
 package com.example._VuTrungNghia_SQL.Utils;
 
+import com.example._VuTrungNghia_SQL.oauth.CustomOAuth2UserService;
+import com.example._VuTrungNghia_SQL.oauth.OAuth2LoginSuccessHandler;
 import com.example._VuTrungNghia_SQL.services.CustomUserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -38,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers( "/css/**", "/js/**", "/", "/register", "/error")
                         .permitAll()
                         .requestMatchers(  "/books/delete","/books/edit").hasAnyAuthority("ADMIN")
-                        .requestMatchers("/books","/books/add").hasAnyAuthority("ADMIN","USER")
+//                        .requestMatchers("/books","/books/add").hasAnyAuthority("ADMIN","USER")
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout.logoutUrl("/logout")
@@ -52,12 +55,26 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/")
                         .permitAll()
+
+                ) .oauth2Login(oauth2Login -> oauth2Login
+                        .loginPage("/login") // If you want to customize the OAuth2 login page
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService) // Set your OAuth2 user service here
+                        )
+                        .successHandler(oAuth2LoginSuccessHandler) // Set your OAuth2 success handler here
                 )
                 .rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret")
                         .tokenValiditySeconds(86400)
                         .userDetailsService(userDetailsService())
                 ).exceptionHandling(exceptionHandling ->
-                        exceptionHandling.accessDeniedPage("/403"))
+                        exceptionHandling.accessDeniedPage("/403")
+                )
                 .build();
     }
+
+    @Autowired
+    private CustomOAuth2UserService oAuth2UserService;
+
+    @Autowired
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 }

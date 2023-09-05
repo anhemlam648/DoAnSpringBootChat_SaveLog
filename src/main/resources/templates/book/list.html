@@ -74,7 +74,7 @@
             <th>Price</th>
             <th>Category</th>
             <th>Action</th>
-            <td sec:authorize="hasAnyAuthority('ADMIN')">
+<!--            <td sec:authorize="hasAnyAuthority('ADMIN')">-->
         </tr>
         <tr th:each="book : ${book}">
             <td th:text="${book.id}"></td>
@@ -82,7 +82,7 @@
             <td th:text="${book.author}"></td>
             <td th:text="${book.price}"></td>
             <td th:text="${book.category.name}"></td>
-            <div sec:authorize="hasAnyAuthority('ADMIN')">
+<!--            <div sec:authorize="hasAnyAuthority('ADMIN')">-->
             <td>
                 <a th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a> |
                 <a th:href="@{/books/delete/{id}(id=${book.id})}" onclick="return confirm('Are you sure?')">Delete</a>
@@ -92,8 +92,10 @@
                     <input type="hidden" name="price" th:value="${book.getPrice()}">
                     <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to add this book to cart?')">Add to cart</button>
                 </form>
+<!--                <a th:href="@{/books/add-to-cart(id=${book.id}, name=${book.title}, price=${book.price}, quantity=1)}"-->
+<!--                   class="btn btn-lg btn-dark add-to-cart-button"-->
+<!--                   onclick="return confirm('Are you sure you want to add this book to cart?')">Thêm vào giỏ hàng</a>-->
             </td>
-            </div>
         </tr>
     </table>
 </div>
