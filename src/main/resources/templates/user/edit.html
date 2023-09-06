@@ -2,31 +2,39 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <th:block th:replace="layout :: Link-css"></th:block>
-    <title>Update Book</title>
+    <th:block th:replace="layout :: Link-css"></th:block> <!-- Thay thế bằng đường dẫn thực tế đến tệp CSS của bạn -->
+    <title>Update Tài Khoản</title>
 </head>
 <body>
-<th:block th:replace="layout :: header"></th:block>
+<div th:replace="layout :: header"></div>
 <div class="container">
-    <h1>Update Book</h1>
-    <form th:action="@{/show/edit/{id}(id=${user.id})}" method="post" th:object="${user}">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" th:field="*{name}" required><br>
+    <h1>Update Tài Khoản</h1>
+    <form th:action="@{/show/edit/{id}(id=${user.id})}" method="post" th:object="${user}" class="update-form">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" th:field="*{name}" class="form-control" required>
+        </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" th:field="*{email}" required><br>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:field="*{email}" class="form-control" required>
+        </div>
 
-        <label for="Ngaysinh">Ngaysinh:</label>
-        <input type="text" id="Ngaysinh" name="Ngaysinh" th:field="*{Ngaysinh}" required><br>
+        <div class="form-group">
+            <label for="Ngaysinh">Ngaysinh:</label>
+            <input type="text" id="Ngaysinh" name="Ngaysinh" th:field="*{Ngaysinh}" class="form-control" required>
+        </div>
 
-        <label for="Gioitinh">Gioitinh:</label>
-        <input type="text" id="Gioitinh" name="Gioitinh" th:field="*{Gioitinh}" required><br>
+        <div class="form-group">
+            <label for="Gioitinh">Gioitinh:</label>
+            <input type="text" id="Gioitinh" name="Gioitinh" th:field="*{Gioitinh}" class="form-control" required>
+        </div>
 
-        <button type="submit">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
     <br>
-    <a th:href="@{/show/users}" class="btn btn-secondary btn-sm">Back to List</a>
+    <a th:href="@{/show/users}" class="btn btn-secondary btn-sm" style="padding: 5px 10px; background-color: #0077b6; color: #fff;">Back to List</a>
 </div>
-<th:block th:replace="layout :: footer"></th:block>
+<div th:replace="layout :: footer"></div>
 </body>
 </html>
