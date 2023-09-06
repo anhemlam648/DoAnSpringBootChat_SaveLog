@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User</title>
+  <th:block th:replace="Layout :: Link-css"></th:block>
+</head>
+<body>
+<th:block th:replace="Layout :: header"></th:block>
+<div class="container">
+  <h1 th:text="${title}"></h1>
+  <table class="table">
+    <tr>
+      <th>ID</th>
+      <th>Tên Nhóm</th>
+    </tr>
+    <tr th:each="groupChat : ${groupChats}">
+      <td th:text="${groupChat.id}"></td>
+      <td th:text="${groupChat.groupName}"></td>
+      <td>
+        <a th:href="@{/groupchat/join/{id}(id=${groupChat.id})}">Join</a>
+      </td>
+      <td>
+        <a th:href="@{/groupchat/delete/{id}(id=${groupChat.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+      </td>
+    </tr>
+  </table>
+</div>
+<th:block th:replace="Layout :: footer"></th:block>
+</body>
+</html>

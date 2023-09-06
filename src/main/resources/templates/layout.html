@@ -40,6 +40,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/show/users">Tài khoản</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/groupchat/list">Nhóm chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/groupchat/create">Tạo nhóm</a>
+                    </li>
                     <li sec:authorize="isAuthenticated()">
                         <form th:action="@{/logout}" method="post">
                             <button class="btn btn-outline-danger" type="submit">Logout</button>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Group Chat</title>
+</head>
+<body>
+<h1>Create Group Chat</h1>
+
+<form method="post" action="/groupchat/create">
+  <label for="groupName">Group Name:</label>
+  <input type="text" id="groupName" name="groupName" required>
+
+  <!-- Thêm input để nhập số lượng thành viên -->
+<!--  <label for="numberOfMembers">Number of Members:</label>-->
+<!--  <input type="number" id="numberOfMembers" name="numberOfMembers" required>-->
+
+  <button type="submit">Create</button>
+</form>
+
+<a href="/groupchat/list">Back to List</a>
+</body>
+</html>

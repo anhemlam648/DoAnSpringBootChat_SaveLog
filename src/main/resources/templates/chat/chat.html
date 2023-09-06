@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat App</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+    /* styles.css */
+
+/* Thiết lập một font chữ và màu nền cho trang */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+}
+
+/* Giao diện chat container */
+.chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header chat */
+.chat-header {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/* Phần hiển thị tin nhắn */
+.chat-messages {
+    flex: 1;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Mỗi tin nhắn */
+.message {
+    background-color: #e5e5ea;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.message strong {
+    color: #007bff;
+}
+
+/* Ô nhập tin nhắn và nút gửi */
+.chat-input {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #fff;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#messageInput {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#fileInput {
+    display: none;
+}
+
+/* Nút gửi */
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+/* Danh sách thành viên */
+.chat-members {
+    padding: 10px;
+    background-color: #fff;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+h3 {
+    margin-top: 0;
+}
+.leave-button {
+    display: inline-block;
+    margin-left: 10px; /* Điều chỉnh khoảng cách giữa các nút */
+}
+  </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>Chat Room</h2>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+        <!-- Tin nhắn sẽ được hiển thị ở đây -->
+    </div>
+    <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Type your message...">
+        <input type="file" id="fileInput" style="display: none;">
+        <button id="sendTextMessage">Send</button>
+        <button id="sendImage">Send Image</button>
+        <button id="sendFile">Send File</button>
+        <a href="/groupchat/list" class="leave-button">Quay lại danh sách nhóm</a>
+    </div>
+    <div class="chat-members">
+        <h3>Members:</h3>
+        <ul id="memberList">
+            <!-- Hiển thị danh sách thành viên ở đây -->
+        </ul>
+    </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
