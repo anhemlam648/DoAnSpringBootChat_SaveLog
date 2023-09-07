@@ -13,12 +13,16 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api")
@@ -35,6 +39,9 @@ public class MessageController {
 
     @Autowired
     private UserService userService;
+
+//    @Autowired
+//    private SimpMessagingTemplate messagingTemplate;
 
     //    @GetMapping("/create")
 //    public String add(Model model){
@@ -53,14 +60,26 @@ public class MessageController {
 //        messageService.saveMessage(chatMessage);
 //        return "redirect:/chat/chat";
 //    }
+//    @GetMapping("/create")
+//    public String add(Model model, Principal principal) {
+//        String loggedInUsername = principal.getName();
+//        User loggedInUser = userService.getUserByUsername(loggedInUsername);
+//
+//        model.addAttribute("chatmessage", new ChatMessage());
+//        model.addAttribute("users", userService.getAllUser());
+//        model.addAttribute("loggedInUser", loggedInUser); // Truyền thông tin người dùng đang đăng nhập
+//        return "chat/chat";
+//    }
     @GetMapping("/create")
-    public String add(Model model, Principal principal) {
+    public String chat(Model model, Principal principal) {
         String loggedInUsername = principal.getName();
         User loggedInUser = userService.getUserByUsername(loggedInUsername);
 
-        model.addAttribute("chatmessage", new ChatMessage());
-        model.addAttribute("users", userService.getAllUser());
-        model.addAttribute("loggedInUser", loggedInUser); // Truyền thông tin người dùng đang đăng nhập
+        // Lấy danh sách tin nhắn từ cơ sở dữ liệu (ví dụ)
+        List<ChatMessage> messages = messageService.getMessagesForUser(loggedInUser);
+
+        model.addAttribute("messages", messages);
+        model.addAttribute("loggedInUser", loggedInUser);
         return "chat/chat";
     }
 
@@ -85,4 +104,19 @@ public class MessageController {
 
         return "redirect:/api/create";
     }
+
+//    @MessageMapping("/send")
+//    @SendTo("/topic/messages")
+//    public ChatMessage sendMessage(ChatMessage chatMessage) {
+//        // Xử lý và lưu tin nhắn vào cơ sở dữ liệu ở đây (đã thêm vào cơ sở dữ liệu)
+//
+//        // Gửi tin nhắn cho người nhận thông qua WebSocket
+//        messagingTemplate.convertAndSendToUser(
+//                chatMessage.getReceiver().getUsername(),
+//                "/topic/messages",
+//                chatMessage
+//        );
+//
+//        return chatMessage;
+//    }
 }

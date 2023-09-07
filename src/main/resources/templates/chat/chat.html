@@ -77,6 +77,7 @@
             cursor: pointer;
             padding: 10px 20px;
             margin-left: 10px;
+
         }
     </style>
     <meta charset="UTF-8">
@@ -107,48 +108,3 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
-<script>
-    $(document).ready(function() {
-        // Hàm này sẽ được gọi khi người dùng gửi tin nhắn
-        $("form").on("submit", function(event) {
-            event.preventDefault(); // Ngăn chặn trình duyệt gửi yêu cầu mặc định
-
-            // Lấy nội dung tin nhắn từ ô nhập
-            var messageContent = $("input[name='content']").val();
-
-            // Thực hiện gửi tin nhắn qua AJAX
-            $.ajax({
-                url: "/api/create",
-                type: "POST",
-                data: { content: messageContent },
-                success: function(response) {
-                    // Tin nhắn đã được gửi thành công, làm thêm bước gì đó ở đây nếu cần
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-
-            // Xóa nội dung tin nhắn từ ô nhập
-            $("input[name='content']").val('');
-        });
-
-        // Hàm này sẽ được gọi định kỳ để cập nhật tin nhắn mới
-        function updateMessages() {
-            $.ajax({
-                url: "/api/get-messages", // Thay đổi địa chỉ tương ứng
-                type: "GET",
-                success: function(response) {
-                    // Cập nhật giao diện với tin nhắn mới từ response
-                    $("#chatMessages").html(response);
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-        }
-
-        // Cập nhật tin nhắn mới định kỳ (ví dụ: mỗi 2 giây)
-        setInterval(updateMessages, 2000);
-    });
-</script>
