@@ -1,133 +1,154 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/schema/security"
+      lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Chat App</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-    /* styles.css */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
 
-/* Thiết lập một font chữ và màu nền cho trang */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    margin: 0;
-}
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-/* Giao diện chat container */
-.chat-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
+        .chat-container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-/* Header chat */
-.chat-header {
-    background-color: #007bff;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
+        .chat-header {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
 
-/* Phần hiển thị tin nhắn */
-.chat-messages {
-    flex: 1;
-    padding: 10px;
-    max-height: 300px;
-    overflow-y: auto;
-}
+        .chat-messages {
+            padding: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
 
-/* Mỗi tin nhắn */
-.message {
-    background-color: #e5e5ea;
-    padding: 5px 10px;
-    margin: 5px;
-    border-radius: 5px;
-}
+        .message-container {
+            display: flex;
+            margin-bottom: 10px;
+        }
 
-.message strong {
-    color: #007bff;
-}
+        .message-sender {
+            font-weight: bold;
+            margin-right: 10px;
+        }
 
-/* Ô nhập tin nhắn và nút gửi */
-.chat-input {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    background-color: #fff;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
+        .message-text {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+        }
 
-#messageInput {
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
+        .chat-input {
+            background-color: #fff;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            padding: 10px;
+            display: flex;
+        }
 
-#fileInput {
-    display: none;
-}
+        .input-field {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
 
-/* Nút gửi */
-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 5px;
-}
-
-/* Danh sách thành viên */
-.chat-members {
-    padding: 10px;
-    background-color: #fff;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-h3 {
-    margin-top: 0;
-}
-.leave-button {
-    display: inline-block;
-    margin-left: 10px; /* Điều chỉnh khoảng cách giữa các nút */
-}
-  </style>
+        .send-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 20px;
+            margin-left: 10px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Chat room</title>
 </head>
 <body>
-<div class="chat-container">
-    <div class="chat-header">
-        <h2>Chat Room</h2>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-        <!-- Tin nhắn sẽ được hiển thị ở đây -->
-    </div>
-    <div class="chat-input">
-        <input type="text" id="messageInput" placeholder="Type your message...">
-        <input type="file" id="fileInput" style="display: none;">
-        <button id="sendTextMessage">Send</button>
-        <button id="sendImage">Send Image</button>
-        <button id="sendFile">Send File</button>
-        <a href="/groupchat/list" class="leave-button">Quay lại danh sách nhóm</a>
-    </div>
-    <div class="chat-members">
-        <h3>Members:</h3>
-        <ul id="memberList">
-            <!-- Hiển thị danh sách thành viên ở đây -->
-        </ul>
+<div class="container">
+    <h1>Chat Room</h1>
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            <div class="message-container">
+                <div th:each="message : ${messages}" class="message-container">
+                    <span class="message-sender" th:text="${message.sender.username}"></span>
+                    <div class="message-text" th:text="${message.content}"></div>
+                </div>
+
+            </div>
+            <!-- Add more messages here -->
+        </div>
+        <div class="chat-input">
+            <form action="/api/create" method="post">
+                <input type="text" class="input-field" name="content" placeholder="Type your message...">
+                <button type="submit" class="send-button">Send</button>
+            </form>
+        </div>
     </div>
 </div>
-<script src="app.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
+<script>
+    $(document).ready(function() {
+        // Hàm này sẽ được gọi khi người dùng gửi tin nhắn
+        $("form").on("submit", function(event) {
+            event.preventDefault(); // Ngăn chặn trình duyệt gửi yêu cầu mặc định
+
+            // Lấy nội dung tin nhắn từ ô nhập
+            var messageContent = $("input[name='content']").val();
+
+            // Thực hiện gửi tin nhắn qua AJAX
+            $.ajax({
+                url: "/api/create",
+                type: "POST",
+                data: { content: messageContent },
+                success: function(response) {
+                    // Tin nhắn đã được gửi thành công, làm thêm bước gì đó ở đây nếu cần
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+            // Xóa nội dung tin nhắn từ ô nhập
+            $("input[name='content']").val('');
+        });
+
+        // Hàm này sẽ được gọi định kỳ để cập nhật tin nhắn mới
+        function updateMessages() {
+            $.ajax({
+                url: "/api/get-messages", // Thay đổi địa chỉ tương ứng
+                type: "GET",
+                success: function(response) {
+                    // Cập nhật giao diện với tin nhắn mới từ response
+                    $("#chatMessages").html(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        // Cập nhật tin nhắn mới định kỳ (ví dụ: mỗi 2 giây)
+        setInterval(updateMessages, 2000);
+    });
+</script>

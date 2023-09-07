@@ -40,5 +40,14 @@ public class GroupMember {
     @JoinColumn(name = "group_chat_id")
     private GroupChat groupChat;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    private String status;
     // Thêm getter và setter
 }

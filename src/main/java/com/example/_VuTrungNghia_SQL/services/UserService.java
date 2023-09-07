@@ -3,6 +3,7 @@ package com.example._VuTrungNghia_SQL.services;
 
 
 import com.example._VuTrungNghia_SQL.entity.Book;
+import com.example._VuTrungNghia_SQL.entity.ChatMessage;
 import com.example._VuTrungNghia_SQL.entity.User;
 
 //import com.example._VuTrungNghia_SQL.repository.IroleRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,5 +49,11 @@ public class UserService {
     public User getUserById(Long id){
         Optional<User> optional = userRepository.findById(id);
         return optional.orElse(null);
+    }
+    public List<User> getAllUser(){
+        return userRepository.findAll();
+    }
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

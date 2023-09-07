@@ -1,18 +1,27 @@
 package com.example._VuTrungNghia_SQL.Controller;
 
 import com.example._VuTrungNghia_SQL.entity.GroupChat;
+import com.example._VuTrungNghia_SQL.entity.GroupMember;
+import com.example._VuTrungNghia_SQL.entity.User;
 import com.example._VuTrungNghia_SQL.repository.GroupChatRepository;
 import com.example._VuTrungNghia_SQL.repository.IuserRepository;
+import com.example._VuTrungNghia_SQL.repository.MemberRepository;
 import com.example._VuTrungNghia_SQL.services.GroupSevice;
 import com.example._VuTrungNghia_SQL.services.MemberSevice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Member;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/groupchat")
@@ -27,12 +36,23 @@ public class GroupChatController {
     private IuserRepository userRepository;
     @Autowired
     private GroupSevice groupSevice;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @GetMapping("/list")
     public String listGroupChats(Model model) {
         List<GroupChat> groupChats = groupChatRepository.findAll();
         model.addAttribute("groupChats", groupChats);
         return "groupchat/list";
+    }
+    @GetMapping("/chat/{groupId}")
+    public String chat(@PathVariable Long groupId, Model model) {
+        // Lấy thông tin thành viên và trạng thái từ cơ sở dữ liệu (hoặc bất kỳ nguồn dữ liệu nào khác)
+        List<GroupMember> members = memberSevice.getAllMember();
+
+        model.addAttribute("groupMembers", members);
+
+        return "chat/chat"; // Trả về tên trang web chat (chat.html)
     }
 
     @GetMapping("/create")
@@ -43,7 +63,7 @@ public class GroupChatController {
     }
 
     @PostMapping("/create")
-    public String addBook(@Valid @ModelAttribute("groupChats") GroupChat groupChat, BindingResult result, Model model ) {
+    public String add(@Valid @ModelAttribute("groupChats") GroupChat groupChat, BindingResult result, Model model ) {
         if(result.hasErrors())
         {
             model.addAttribute("member", memberSevice.getAllMember());
@@ -59,96 +79,12 @@ public class GroupChatController {
         return "redirect:/groupchat/list";
     }
 
-    //    @PostMapping("/join/{id}")
-//    public String joinChat(@PathVariable Long id, Model model) {
-//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String currentUsername = userDetails.getUsername();
-//
-//        Optional<GroupChat> groupChatOptional = groupChatRepository.findById(id);
-//
-//        if (groupChatOptional.isPresent()) {
-//            GroupChat groupChat = groupChatOptional.get();
-//
-//            boolean isAlreadyMember = groupChat.getGroupMembers().stream()
-//                    .anyMatch(member -> member.getUser().getUsername().equals(currentUsername));
-//
-//            if (!isAlreadyMember) {
-//                // Tham gia nhóm chat
-//                GroupMember newMember = new GroupMember();
-//                User currentUser = userRepository.findByUsername(currentUsername); // Lấy thông tin người dùng từ UserRepository
-//                newMember.setUser(currentUser);
-//                newMember.setGroupChat(groupChat);
-//                groupChat.getGroupMembers().add(newMember);
-//
-//                // Cập nhật số lượng thành viên
-//                groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() + 1);
-//
-//                // Lưu lại nhóm chat đã cập nhật
-//                groupChatRepository.save(groupChat);
-//            } else {
-//                // Rời khỏi nhóm chat
-//                groupChat.getGroupMembers().removeIf(member -> member.getUser().getUsername().equals(currentUsername));
-//
-//                // Cập nhật số lượng thành viên
-//                groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() - 1);
-//
-//                // Lưu lại nhóm chat đã cập nhật
-//                groupChatRepository.save(groupChat);
-//            }
-//        }
-//
-//        return "redirect:/groupchat/list";
-//    }
-//    @GetMapping("/join/{id}")
-//    public String joinChat(@PathVariable Long id, Model model) {
-//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String currentUsername = userDetails.getUsername();
-//
-//        Optional<GroupChat> groupChatOptional = groupChatRepository.findById(id);
-//
-//        if (groupChatOptional.isPresent()) {
-//            GroupChat groupChat = groupChatOptional.get(); // Khai báo và gán giá trị cho biến groupChat
-//
-//            boolean isAlreadyMember = groupChat.getGroupMembers().stream()
-//                    .anyMatch(member -> member.getUser().getUsername().equals(currentUsername));
-//
-//            if (!isAlreadyMember) {
-//                // Tham gia nhóm chat
-//                GroupMember newMember = new GroupMember();
-//                User currentUser = userRepository.findByUsername(currentUsername); // Lấy thông tin người dùng từ UserRepository
-//                newMember.setUser(currentUser);
-//                newMember.setGroupChat(groupChat);
-//                groupChat.getGroupMembers().add(newMember);
-//
-//                // Cập nhật số lượng thành viên
-//                groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() - 1);
-//
-//                // Lưu lại nhóm chat đã cập nhật
-//                groupChatRepository.save(groupChat);
-//            } else {
-//                // Rời khỏi nhóm chat
-//                groupChat.getGroupMembers().removeIf(member -> member.getUser().getUsername().equals(currentUsername));
-//
-//                // Cập nhật số lượng thành viên
-//                groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() + 1);
-//                // Lưu lại nhóm chat đã cập nhật
-//                groupChatRepository.save(groupChat);
-//            }
-//
-//            // Truyền số lượng thành viên vào trang "chat/chat"
-//            model.addAttribute("numberOfMembers", groupChat.getNumberOfMembers());
-//
-//            // Chuyển hướng người dùng đến trang "chat/chat"
-//            return "chat/chat";
-//        } else {
-//            // Xử lý lỗi nếu không tìm thấy nhóm chat
-//            return "redirect:/groupchat/list";
-//        }
-//    }
     @GetMapping("/join/{id}")
-    public String joinChat(@PathVariable Long id, Model model){
+    public String joinChat(@PathVariable Long id){
+
         return "chat/chat";
     }
+
 
 
 }
