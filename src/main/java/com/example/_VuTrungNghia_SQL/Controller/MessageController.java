@@ -92,24 +92,34 @@ public class MessageController {
 
         // Lấy người nhận tin nhắn (ở đây là một ví dụ, bạn cần cung cấp giá trị thích hợp)
         User receiverUser = userService.getUserByUsername("DEMO4");
+//        Long groupId = groupSevice.createGroupChatAndGetGroupId();
 
         // Tạo đối tượng tin nhắn và đặt người gửi và người nhận
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setContent(messageContent);
         chatMessage.setSender(loggedInUser);
         chatMessage.setReceiver(receiverUser); // Đảm bảo bạn đã đặt giá trị cho receiver
-
-        // Lưu tin nhắn vào cơ sở dữ liệu
+        Long groupId = 1L;
+        chatMessage.setGroupId(groupId);
+        // Lưu tin nhắn ào cơ sở dữ liệu
         messageService.saveMessage(chatMessage);
 
-        return "redirect:/api/messages";
+        return "redirect:/api/messages/" + groupId;
     }
-    @GetMapping("/messages")
-    public String getAllMessages(Model model) {
-        List<ChatMessage> messages = messageService.getAllMessages();
-        model.addAttribute("messages", messages);
-        return "chat/messages"; // Điều hướng đến trang hiển thị tin nhắn
-    }
+//    @GetMapping("/messages")
+//    public String getAllMessages(Model model) {
+//        List<ChatMessage> messages = messageService.getAllMessages();
+//        model.addAttribute("messages", messages);
+//        return "chat/messages"; // Điều hướng đến trang hiển thị tin nhắn
+//    }
+@GetMapping("/messages/{groupId}")
+public String getMessagesForGroup(@PathVariable Long groupId, Model model) {
+    // Lấy danh sách tin nhắn cho nhóm chat cụ thể (sử dụng groupId để xác định nhóm chat)
+    List<ChatMessage> messages = messageService.getMessagesByGroupId(groupId);
+    model.addAttribute("messages", messages);
+    model.addAttribute("groupId", groupId);
+    return "chat/messages";
+}
 
 //    @MessageMapping("/send")
 //    @SendTo("/topic/messages")

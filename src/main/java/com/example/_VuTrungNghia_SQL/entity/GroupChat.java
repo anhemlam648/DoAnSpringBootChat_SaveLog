@@ -54,5 +54,7 @@ public class GroupChat {
     public void setNumberOfMembers(int numberOfMembers) {
         this.numberOfMembers = numberOfMembers;
     }
+
+
 }
 

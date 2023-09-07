@@ -2,22 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>User</title>
+    <title>Nhom Chat</title>
     <th:block th:replace="Layout :: Link-css"></th:block>
     <style>
-        .create-group-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-}
+        body {
+            background-color: #6b5b95; /* Màu nền tím */
+            color: #fff; /* Màu chữ trắng */
+            font-family: Arial, sans-serif;
+        }
 
-.create-group-button:hover {
-    background-color: #0056b3;
-}
+        .create-group-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .create-group-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -34,17 +40,18 @@
             <td><span class="bold-text" th:text="${groupChat.groupName}"></span></td>
             <td class="nav-item">
                 <!-- Tạo liên kết để tham gia nhóm chat -->
-                <a class="nav-link create-group-button" th:href="@{/api/messages}">Join</a>
+                <a class="nav-link create-group-button join-button" th:href="@{'/api/messages/' + ${groupChat.id}}">Join</a>
             </td>
-            <td class="nav-item">
-                <a class="nav-link create-group-button" href="/groupchat/create">Tạo nhóm</a>
-            </td>
+<!--            <td class="nav-item">-->
+<!--                <a class="nav-link create-group-button" href="/groupchat/create">Tạo nhóm</a>-->
+<!--            </td>-->
             <td class="nav-item">
                 <a a class="nav-link create-group-button" th:href="@{/groupchat/delete/{id}(id=${groupChat.id})}" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
     </table>
 </div>
+</script>
 <th:block th:replace="Layout :: footer"></th:block>
 </body>
 </html>

@@ -13,6 +13,7 @@ import java.util.List;
 @Service
 public class MessageService {
 
+
     private final MessageRepository messageRepository;
 
     @Autowired
@@ -39,4 +40,10 @@ public class MessageService {
         // Bạn cần điều chỉnh truy vấn tùy theo cơ sở dữ liệu của bạn
         return messageRepository.findBySender(user);
     }
+
+    public List<ChatMessage> getMessagesByGroupId(Long groupId) {
+        return messageRepository.findByGroupId(groupId);
+    }
+
+
 }

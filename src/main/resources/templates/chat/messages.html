@@ -97,41 +97,6 @@
     <div class="back-button">
         <a th:href="@{/groupchat/list}" class="back-link">Trở lại</a>
     </div>
-    <script>
-  const chatMessages = document.getElementById('chatMessages');
-  const messageForm = document.getElementById('messageForm');
-  const messageInput = document.getElementById('messageInput');
-
-  messageForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const message = messageInput.value;
-    if (message.trim() !== '') {
-      // Send the message to the server and display it in the chat container
-      displayMessage('You', message);
-      messageInput.value = '';
-    }
-  });
-
-  function displayMessage(sender, content) {
-    const messageContainer = document.createElement('div');
-    messageContainer.classList.add('message-container');
-
-    const senderElement = document.createElement('span');
-    senderElement.classList.add('message-sender');
-    senderElement.textContent = sender;
-
-    const messageText = document.createElement('div');
-    messageText.classList.add('message-text');
-    messageText.textContent = content;
-
-    messageContainer.appendChild(senderElement);
-    messageContainer.appendChild(messageText);
-    chatMessages.appendChild(messageContainer);
-
-    // Scroll to the bottom of the chat container to show the latest message
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-</script>
 </div>
 </body>
 </html>

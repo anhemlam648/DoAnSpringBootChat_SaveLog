@@ -76,6 +76,15 @@ public class ChatMessage {
         this.sentAt = LocalDateTime.now();
     }
 
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    private Long groupId;
     // Constructors, getters, and setters
 
     // ... (các phương thức getters và setters khác)
