@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <title>User</title>
     <th:block th:replace="Layout :: Link-css"></th:block>
+    <style>
+        .create-group-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.create-group-button:hover {
+    background-color: #0056b3;
+}
+    </style>
 </head>
 <body>
 <th:block th:replace="Layout :: header"></th:block>
@@ -13,20 +28,19 @@
         <tr>
             <th>ID</th>
             <th>Tên Nhóm</th>
-            <th>Số lượng thành viên</th>
         </tr>
         <tr th:each="groupChat : ${groupChats}">
-            <td th:text="${groupChat.id}"></td>
-            <td th:text="${groupChat.groupName}"></td>
-            <td>
+            <td><span class="bold-text" th:text="${groupChat.id}"></span></td>
+            <td><span class="bold-text" th:text="${groupChat.groupName}"></span></td>
+            <td class="nav-item">
                 <!-- Tạo liên kết để tham gia nhóm chat -->
-                <a th:href="@{/api/messages}">Join</a>
+                <a class="nav-link create-group-button" th:href="@{/api/messages}">Join</a>
             </td>
-<!--            <td>-->
-<!--                <a th:href="@{/member/show/7}">Join</a>-->
-<!--            </td>-->
-            <td>
-                <a th:href="@{/groupchat/delete/{id}(id=${groupChat.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+            <td class="nav-item">
+                <a class="nav-link create-group-button" href="/groupchat/create">Tạo nhóm</a>
+            </td>
+            <td class="nav-item">
+                <a a class="nav-link create-group-button" th:href="@{/groupchat/delete/{id}(id=${groupChat.id})}" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
     </table>
