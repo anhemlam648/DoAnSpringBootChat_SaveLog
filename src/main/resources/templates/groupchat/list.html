@@ -34,17 +34,19 @@
         <tr>
             <th>ID</th>
             <th>Tên Nhóm</th>
+            <th>Số lượng thành viên</th>
         </tr>
         <tr th:each="groupChat : ${groupChats}">
             <td><span class="bold-text" th:text="${groupChat.id}"></span></td>
             <td><span class="bold-text" th:text="${groupChat.groupName}"></span></td>
+            <td><span th:text="${groupChat.numberOfMembers}"></span></td>
             <td class="nav-item">
                 <!-- Tạo liên kết để tham gia nhóm chat -->
                 <a class="nav-link create-group-button join-button" th:href="@{'/api/messages/' + ${groupChat.id}}">Join</a>
             </td>
-<!--            <td class="nav-item">-->
-<!--                <a class="nav-link create-group-button" href="/groupchat/create">Tạo nhóm</a>-->
-<!--            </td>-->
+            <td class="nav-item">
+                <a  class="nav-link create-group-button join-button"  th:href="@{'/api/leave-group/' + ${groupChat.id}}">Rời nhóm</a>
+            </td>
             <td class="nav-item">
                 <a a class="nav-link create-group-button" th:href="@{/groupchat/delete/{id}(id=${groupChat.id})}" onclick="return confirm('Are you sure?')">Delete</a>
             </td>

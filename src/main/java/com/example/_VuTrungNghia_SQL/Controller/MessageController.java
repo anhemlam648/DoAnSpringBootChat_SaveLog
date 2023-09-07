@@ -2,7 +2,9 @@ package com.example._VuTrungNghia_SQL.Controller;
 
 import com.example._VuTrungNghia_SQL.entity.ChatMessage;
 import com.example._VuTrungNghia_SQL.entity.GroupChat;
+import com.example._VuTrungNghia_SQL.entity.GroupMember;
 import com.example._VuTrungNghia_SQL.entity.User;
+import com.example._VuTrungNghia_SQL.repository.GroupChatRepository;
 import com.example._VuTrungNghia_SQL.repository.MessageRepository;
 import com.example._VuTrungNghia_SQL.services.GroupSevice;
 import com.example._VuTrungNghia_SQL.services.MessageService;
@@ -22,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -34,6 +37,8 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private GroupChatRepository groupChatRepository;
     @Autowired
     private GroupSevice groupSevice;
 
@@ -112,14 +117,73 @@ public class MessageController {
 //        model.addAttribute("messages", messages);
 //        return "chat/messages"; // Điều hướng đến trang hiển thị tin nhắn
 //    }
+//@GetMapping("/messages/{groupId}")
+//public String getMessagesForGroup(@PathVariable Long groupId, Model model) {
+//    // Lấy danh sách tin nhắn cho nhóm chat cụ thể (sử dụng groupId để xác định nhóm chat)
+//    List<ChatMessage> messages = messageService.getMessagesByGroupId(groupId);
+//    model.addAttribute("messages", messages);
+//    model.addAttribute("groupId", groupId);
+//    return "chat/messages";
+//}
 @GetMapping("/messages/{groupId}")
 public String getMessagesForGroup(@PathVariable Long groupId, Model model) {
     // Lấy danh sách tin nhắn cho nhóm chat cụ thể (sử dụng groupId để xác định nhóm chat)
     List<ChatMessage> messages = messageService.getMessagesByGroupId(groupId);
+
+    // Lấy thông tin của nhóm chat, bao gồm số lượng thành viên
+    GroupChat groupChat = groupChatRepository.findById(groupId).orElse(null);
+
+    if (groupChat != null) {
+        // Increment the member count
+        groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() + 1);
+        groupChatRepository.save(groupChat);
+    }
+
     model.addAttribute("messages", messages);
     model.addAttribute("groupId", groupId);
     return "chat/messages";
 }
+    @GetMapping("/leave-group/{groupId}")
+    public String leaveGroup(@PathVariable Long groupId, Principal principal) {
+        // Lấy thông tin của nhóm chat
+        GroupChat groupChat = groupChatRepository.findById(groupId).orElse(null);
+
+        if (groupChat != null) {
+            // Kiểm tra xem người dùng có phải là thành viên của nhóm không
+            boolean isUserMember = isUserMember(groupChat, principal.getName());
+
+            if (isUserMember) {
+                // Người dùng là thành viên của nhóm, hãy xóa họ khỏi danh sách thành viên
+                removeUserFromGroup(groupChat, principal.getName());
+                groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() - 1);
+                groupChatRepository.save(groupChat);
+            }
+        }
+
+        // Chuyển hướng người dùng đến trang khác sau khi rời nhóm (ví dụ: trang chính)
+        return "redirect:/groupchat/list"; // Thay đổi đường dẫn tùy theo trang bạn muốn chuyển hướng sau khi rời nhóm.
+    }
+    private boolean isUserMember(GroupChat groupChat, String username) {
+        // Kiểm tra xem người dùng đã là thành viên của nhóm chưa
+        List<GroupMember> groupMembers = groupChat.getGroupMembers();
+        for (GroupMember member : groupMembers) {
+            if (member.getUser().getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private void removeUserFromGroup(GroupChat groupChat, String username) {
+        List<GroupMember> groupMembers = groupChat.getGroupMembers();
+        Iterator<GroupMember> iterator = groupMembers.iterator();
+        while (iterator.hasNext()) {
+            GroupMember member = iterator.next();
+            if (member.getUser().getUsername().equals(username)) {
+                iterator.remove();
+            }
+        }
+        groupChatRepository.save(groupChat);
+    }
 
 //    @MessageMapping("/send")
 //    @SendTo("/topic/messages")
