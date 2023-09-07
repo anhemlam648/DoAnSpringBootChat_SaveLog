@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Chat Room</title>
-  <style>
+    <meta charset="UTF-8">
+    <title>Chat Room</title>
+    <style>
     body {
       font-family: Arial, sans-serif;
     }
@@ -61,42 +61,43 @@
       cursor: pointer;
     }
     .back-button {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .back-link {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 5px;
-  text-decoration: none;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
 }
 
 .back-link:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>Chat Room</h1>
-  <div class="chat-container" id="chatMessages">
-    <div th:each="message : ${messages}" class="message-container">
-      <span class="message-sender" th:text="${message.sender.username}"></span>
-      <div class="message-text" th:text="${message.content}"></div>
-  </div>
-  <div class="chat-input">
-    <form id="messageForm">
-      <input type="text" class="input-field" id="messageInput" placeholder="Type your message...">
-      <button type="submit" class="send-button">Send</button>
-    </form>
-  </div>
-</div>
-  <div class="back-button">
-    <a href="/groupchat/list" class="back-link">Trở lại</a>
-  </div>
-<script>
+    <h1>Chat Room</h1>
+    <div class="chat-container" id="chatMessages">
+        <div th:each="message : ${messages}" class="message-container">
+            <span class="message-sender" th:text="${message.sender.username}"></span>
+            <div class="message-text" th:text="${message.content}"></div>
+        </div>
+    </div>
+    <div class="chat-input">
+        <form action="/api/create" method="post">
+            <input type="text" class="input-field" name="content" placeholder="Type your message...">
+            <button type="submit" class="send-button">Send</button>
+        </form>
+    </div>
+    <div class="back-button">
+        <a th:href="@{/groupchat/list}" class="back-link">Trở lại</a>
+    </div>
+    <script>
   const chatMessages = document.getElementById('chatMessages');
   const messageForm = document.getElementById('messageForm');
   const messageInput = document.getElementById('messageInput');
