@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Room</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .chat-container {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: #f7f7f7;
+      height: 400px;
+      overflow-y: scroll;
+    }
+
+    .message-container {
+      margin: 10px 0;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .message-sender {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .message-text {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .chat-input {
+      margin-top: 20px;
+    }
+
+    .input-field {
+      width: 70%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .send-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .back-button {
+  margin-top: 10px;
+}
+
+.back-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  background-color: #0056b3;
+}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Chat Room</h1>
+  <div class="chat-container" id="chatMessages">
+    <div th:each="message : ${messages}" class="message-container">
+      <span class="message-sender" th:text="${message.sender.username}"></span>
+      <div class="message-text" th:text="${message.content}"></div>
+  </div>
+  <div class="chat-input">
+    <form id="messageForm">
+      <input type="text" class="input-field" id="messageInput" placeholder="Type your message...">
+      <button type="submit" class="send-button">Send</button>
+    </form>
+  </div>
+</div>
+  <div class="back-button">
+    <a href="/groupchat/list" class="back-link">Trở lại</a>
+  </div>
+<script>
+  const chatMessages = document.getElementById('chatMessages');
+  const messageForm = document.getElementById('messageForm');
+  const messageInput = document.getElementById('messageInput');
+
+  messageForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const message = messageInput.value;
+    if (message.trim() !== '') {
+      // Send the message to the server and display it in the chat container
+      displayMessage('You', message);
+      messageInput.value = '';
+    }
+  });
+
+  function displayMessage(sender, content) {
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message-container');
+
+    const senderElement = document.createElement('span');
+    senderElement.classList.add('message-sender');
+    senderElement.textContent = sender;
+
+    const messageText = document.createElement('div');
+    messageText.classList.add('message-text');
+    messageText.textContent = content;
+
+    messageContainer.appendChild(senderElement);
+    messageContainer.appendChild(messageText);
+    chatMessages.appendChild(messageContainer);
+
+    // Scroll to the bottom of the chat container to show the latest message
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+</script>
+</div>
+</body>
+</html>

@@ -102,7 +102,13 @@ public class MessageController {
         // Lưu tin nhắn vào cơ sở dữ liệu
         messageService.saveMessage(chatMessage);
 
-        return "redirect:/api/create";
+        return "redirect:/api/messages";
+    }
+    @GetMapping("/messages")
+    public String getAllMessages(Model model) {
+        List<ChatMessage> messages = messageService.getAllMessages();
+        model.addAttribute("messages", messages);
+        return "chat/messages"; // Điều hướng đến trang hiển thị tin nhắn
     }
 
 //    @MessageMapping("/send")

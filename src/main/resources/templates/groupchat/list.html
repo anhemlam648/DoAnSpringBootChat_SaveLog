@@ -20,11 +20,11 @@
             <td th:text="${groupChat.groupName}"></td>
             <td>
                 <!-- Tạo liên kết để tham gia nhóm chat -->
-                <a th:href="@{/api/create}">Join</a>
+                <a th:href="@{/api/messages}">Join</a>
             </td>
-            <td>
-                <a th:href="@{/member/show/7}">Join</a>
-            </td>
+<!--            <td>-->
+<!--                <a th:href="@{/member/show/7}">Join</a>-->
+<!--            </td>-->
             <td>
                 <a th:href="@{/groupchat/delete/{id}(id=${groupChat.id})}" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
