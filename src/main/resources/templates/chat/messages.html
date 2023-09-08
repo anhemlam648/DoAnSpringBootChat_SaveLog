@@ -60,23 +60,29 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     .back-button {
-    margin-top: 10px;
-}
+      margin-top: 10px;
+    }
 
-.back-link {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-}
+    .back-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
 
-.back-link:hover {
-    background-color: #0056b3;
-}
+    .back-link:hover {
+      background-color: #0056b3;
+    }
+
+    .attached-image {
+      max-width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 <body>
@@ -86,11 +92,19 @@
         <div th:each="message : ${messages}" class="message-container">
             <span class="message-sender" th:text="${message.sender.username}"></span>
             <div class="message-text" th:text="${message.content}"></div>
+
+            <!-- Hiển thị hình ảnh đính kèm (nếu có) -->
+            <div th:if="${message.attachedFileName}">
+                Attached File:
+                <a th:href="'/download/' + ${message.attachedFileName}" th:text="${message.attachedFileName}" download></a>
+            </div>
+<!--            <img style="height: 363px" th:src="${product.urlImageThumbnail}" class="card-img-top" alt="...">-->
         </div>
     </div>
     <div class="chat-input">
-        <form action="/api/create" method="post">
+        <form action="/api/create" method="post" enctype="multipart/form-data">
             <input type="text" class="input-field" name="content" placeholder="Type your message...">
+            <input type="file" name="file" accept="image/*">
             <button type="submit" class="send-button">Send</button>
         </form>
     </div>

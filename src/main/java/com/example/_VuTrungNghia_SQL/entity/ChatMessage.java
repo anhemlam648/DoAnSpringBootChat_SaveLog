@@ -88,5 +88,25 @@ public class ChatMessage {
     // Constructors, getters, and setters
 
     // ... (các phương thức getters và setters khác)
+    @Column(nullable = true)
+    @Lob
+    private byte[] attachedFile; // Thêm trường này để lưu dữ liệu của file
 
+    public byte[] getAttachedFile() {
+        return attachedFile;
+    }
+
+    public void setAttachedFile(byte[] attachedFile) {
+        this.attachedFile = attachedFile;
+    }
+
+    public String getAttachedFileName() {
+        return attachedFileName;
+    }
+
+    public void setAttachedFileName(String attachedFileName) {
+        this.attachedFileName = attachedFileName;
+    }
+
+    private String attachedFileName;
 }

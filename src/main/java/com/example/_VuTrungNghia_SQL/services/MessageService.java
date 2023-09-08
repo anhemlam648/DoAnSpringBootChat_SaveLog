@@ -44,6 +44,8 @@ public class MessageService {
     public List<ChatMessage> getMessagesByGroupId(Long groupId) {
         return messageRepository.findByGroupId(groupId);
     }
-
-
+    public ChatMessage getMessageById(Long messageId) {
+        // Thực hiện logic để tìm tin nhắn theo ID và trả về
+        return messageRepository.findById(messageId).orElse(null);
+    }
 }

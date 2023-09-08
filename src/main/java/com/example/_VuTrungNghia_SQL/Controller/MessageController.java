@@ -14,7 +14,9 @@ import jakarta.mail.Message;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -26,7 +28,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Iterator;
 import java.util.List;
@@ -118,32 +123,96 @@ public class MessageController {
 //
 //        return "redirect:/api/messages/" + groupId;
 //    }
+//@PostMapping("/create")
+//public String addChat(Model model, Principal principal, HttpServletRequest request) {
+//    String loggedInUsername = principal.getName();
+//    User loggedInUser = userService.getUserByUsername(loggedInUsername);
+//
+//    String messageContent = request.getParameter("content"); // Lấy giá trị của trường tin nhắn
+//
+//    // Lấy danh sách tất cả người dùng
+//    List<User> allUsers = userService.getAllUser();
+//
+//    // Tạo đối tượng tin nhắn và đặt người gửi
+//    ChatMessage chatMessage = new ChatMessage();
+//    chatMessage.setContent(messageContent);
+//    chatMessage.setSender(loggedInUser);
+//    Long groupId = 1L;
+//    chatMessage.setGroupId(groupId);
+//
+//    // Lặp qua danh sách người dùng và gửi tin nhắn cho mỗi người dùng
+//    for (User receiverUser : allUsers) {
+//        chatMessage.setReceiver(receiverUser);
+//        // Lưu tin nhắn vào cơ sở dữ liệu
+//        messageService.saveMessage(chatMessage);
+//    }
+//
+//    return "redirect:/api/messages/" + groupId;
+//}
 @PostMapping("/create")
-public String addChat(Model model, Principal principal, HttpServletRequest request) {
+public String addChat(
+        Model model,
+        Principal principal,
+        @RequestParam("content") String messageContent,
+        @RequestParam("file") MultipartFile file
+) {
+    // Lấy thông tin người dùng đã đăng nhập
     String loggedInUsername = principal.getName();
     User loggedInUser = userService.getUserByUsername(loggedInUsername);
-
-    String messageContent = request.getParameter("content"); // Lấy giá trị của trường tin nhắn
-
-    // Lấy danh sách tất cả người dùng
-    List<User> allUsers = userService.getAllUser();
 
     // Tạo đối tượng tin nhắn và đặt người gửi
     ChatMessage chatMessage = new ChatMessage();
     chatMessage.setContent(messageContent);
     chatMessage.setSender(loggedInUser);
-    Long groupId = 1L;
+    Long groupId = 1L; // Thay đổi groupId theo nhu cầu của bạn
     chatMessage.setGroupId(groupId);
 
+    // Xử lý file đính kèm (nếu có)
+    if (!file.isEmpty()) {
+        long fileSize = file.getSize(); // Lấy kích thước tệp (byte)
+
+        // Kiểm tra kích thước tệp (ví dụ: giới hạn 1MB)
+        if (fileSize > 1 * 1024 * 1024) {
+            // Xử lý lỗi nếu tệp quá lớn
+        } else {
+            try {
+                // Lưu dữ liệu của file vào tin nhắn
+                chatMessage.setAttachedFile(file.getBytes());
+                chatMessage.setAttachedFileName(file.getOriginalFilename());
+            } catch (IOException e) {
+                // Xử lý lỗi nếu có
+            }
+        }
+    }
+
     // Lặp qua danh sách người dùng và gửi tin nhắn cho mỗi người dùng
+    List<User> allUsers = userService.getAllUser();
     for (User receiverUser : allUsers) {
         chatMessage.setReceiver(receiverUser);
-        // Lưu tin nhắn vào cơ sở dữ liệu
+        // Lưu tin nhắn vào cơ sở dữ liệu (nếu bạn muốn)
         messageService.saveMessage(chatMessage);
     }
 
     return "redirect:/api/messages/" + groupId;
 }
+
+    @GetMapping("/download/{messageId}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable Long messageId) {
+        // Retrieve the ChatMessage with the given ID from your service
+        ChatMessage chatMessage = messageService.getMessageById(messageId);
+
+        if (chatMessage != null && chatMessage.getAttachedFile() != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", chatMessage.getAttachedFileName());
+
+            // Return the binary data and headers as a ResponseEntity
+            return new ResponseEntity<>(chatMessage.getAttachedFile(), headers, HttpStatus.OK);
+        } else {
+            // Handle the case where the file or message does not exist
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 //    @GetMapping("/messages")
 //    public String getAllMessages(Model model) {
 //        List<ChatMessage> messages = messageService.getAllMessages();
@@ -158,24 +227,24 @@ public String addChat(Model model, Principal principal, HttpServletRequest reque
 //    model.addAttribute("groupId", groupId);
 //    return "chat/messages";
 //}
-@GetMapping("/messages/{groupId}")
-public String getMessagesForGroup(@PathVariable Long groupId, Model model) {
-    // Lấy danh sách tin nhắn cho nhóm chat cụ thể (sử dụng groupId để xác định nhóm chat)
-    List<ChatMessage> messages = messageService.getMessagesByGroupId(groupId);
+        @GetMapping("/messages/{groupId}")
+        public String getMessagesForGroup(@PathVariable Long groupId, Model model) {
+            // Lấy danh sách tin nhắn cho nhóm chat cụ thể (sử dụng groupId để xác định nhóm chat)
+            List<ChatMessage> messages = messageService.getMessagesByGroupId(groupId);
 
-    // Lấy thông tin của nhóm chat, bao gồm số lượng thành viên
-    GroupChat groupChat = groupChatRepository.findById(groupId).orElse(null);
+            // Lấy thông tin của nhóm chat, bao gồm số lượng thành viên
+            GroupChat groupChat = groupChatRepository.findById(groupId).orElse(null);
 
-    if (groupChat != null) {
-        // Increment the member count
-        groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() + 1);
-        groupChatRepository.save(groupChat);
-    }
+            if (groupChat != null) {
+                // Increment the member count
+                groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() + 1);
+                groupChatRepository.save(groupChat);
+            }
 
-    model.addAttribute("messages", messages);
-    model.addAttribute("groupId", groupId);
-    return "chat/messages";
-    }
+            model.addAttribute("messages", messages);
+            model.addAttribute("groupId", groupId);
+            return "chat/messages";
+            }
 
 
     @GetMapping("/leave-group/{groupId}")
@@ -193,7 +262,7 @@ public String getMessagesForGroup(@PathVariable Long groupId, Model model) {
         // Chuyển hướng người dùng đến trang khác sau khi rời nhóm (ví dụ: trang chính)
         return "redirect:/groupchat/list"; // Thay đổi đường dẫn tùy theo trang bạn muốn chuyển hướng sau khi rời nhóm.
     }
-    private boolean isUserMember(GroupChat groupChat, String username) {
+    private boolean fixUserMember(GroupChat groupChat, String username) {
         // Kiểm tra xem người dùng có trong danh sách thành viên của nhóm chat không
         List<GroupMember> groupMembers = groupChat.getGroupMembers();
         for (GroupMember member : groupMembers) {
