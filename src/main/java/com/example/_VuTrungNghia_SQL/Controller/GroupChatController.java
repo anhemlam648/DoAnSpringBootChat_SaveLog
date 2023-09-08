@@ -45,6 +45,16 @@ public class GroupChatController {
         model.addAttribute("groupChats", groupChats);
         return "groupchat/list";
     }
+
+    @GetMapping("/search")
+    public String searchBooks(@RequestParam("keyword") String keyword, Model model)
+    {
+        List<GroupChat> groupChats = groupSevice.searchGroup(keyword);
+        model.addAttribute("groupChats", groupChats);
+        model.addAttribute("keyword", keyword);
+        return "groupchat/list";
+    }
+
     @GetMapping("/chat/{groupId}")
     public String chat(@PathVariable Long groupId, Model model) {
         // Lấy thông tin thành viên và trạng thái từ cơ sở dữ liệu (hoặc bất kỳ nguồn dữ liệu nào khác)

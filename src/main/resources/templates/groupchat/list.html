@@ -4,6 +4,53 @@
     <meta charset="UTF-8">
     <title>Nhom Chat</title>
     <th:block th:replace="Layout :: Link-css"></th:block>
+    <script>
+        $(document).ready(function() {
+            $('input[name="keyword"]').on('input', function() {
+                var keyword = $(this).val();
+                if (keyword.trim().length > 0) {
+                    getAutocompleteResults(keyword);
+                } else {
+                    hideAutocomplete();
+                }
+            });
+
+            function getAutocompleteResults(keyword) {
+                $.ajax({
+                    url: '/books/search-suggestions',
+                    type: 'GET',
+                    data: {keyword: keyword},
+                    success: function(response) {
+                        showAutocomplete(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            function showAutocomplete(results) {
+                var autocompleteContainer = $('#autocompleteContainer');
+                autocompleteContainer.empty();
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    var div = $('<div></div>');
+                    div.text(result);
+                    div.addClass('autocomplete-item');
+                    div.on('click', function() {
+                        var selectedValue = $(this).text();
+                        $('input[name="keyword"]').val(selectedValue);
+                        hideAutocomplete();
+                    });
+                    autocompleteContainer.append(div);
+                }
+            }
+
+            function hideAutocomplete() {
+                $('#autocompleteContainer').empty();
+            }
+        });
+    </script>
     <style>
         body {
             background-color: #6b5b95; /* Màu nền tím */
@@ -29,7 +76,13 @@
 <body>
 <th:block th:replace="Layout :: header"></th:block>
 <div class="container">
-    <h1 th:text="${title}"></h1>
+    <form th:action="@{/groupchat/search}" method="GET" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" name="keyword" placeholder="Search by name" style="background-color: #b366ff;">
+            <div id="autocompleteContainer"></div>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
     <table class="table">
         <tr>
             <th>ID</th>

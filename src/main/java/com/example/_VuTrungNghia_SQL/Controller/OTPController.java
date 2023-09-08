@@ -19,22 +19,22 @@ public class OTPController {
 
     @Autowired
     private UserService userService;
-        @GetMapping("/otp-verification")
-    public String otpVerificationForm(Model model) {
-        return "user/otp-verification";
-    }
-    @PostMapping("/otp-verification")
-    public String OTP(@RequestParam String otpCode, @RequestParam String email, Model model) {
-        User user = userService.findByUsername(email);
-        if (otpCode.equals(user.getEmailVerificationCode())) {
-            //Xác thực thành công
-            user.setEmailVerified(true);
-            return "redirect:/"; // Chuyển hướng đến trang đăng nhập
-        } else {
-            // Xác thực thất bại
-            model.addAttribute("otp_error", "Mã OTP không hợp lệ.");
-            return "/404";
-        }
-
-    }
+//    @GetMapping("/otp-verification")
+//    public String otpVerificationForm(Model model) {
+//        return "user/otp-verification";
+//    }
+//    @PostMapping("/otp-verification")
+//    public String OTP(@RequestParam String otpCode, @RequestParam String email, Model model) {
+//        User user = userService.findByUsername(email);
+//        if (otpCode.equals(user.getEmailVerificationCode())) {
+//            //Xác thực thành công
+//            user.setEmailVerified(true);
+//            return "user/success-page"; // Chuyển hướng đến trang đăng nhập
+//        } else {
+//            // Xác thực thất bại
+//            model.addAttribute("otp_error", "Mã OTP không hợp lệ.");
+//            return "/404";
+//        }
+//
+//    }
 }

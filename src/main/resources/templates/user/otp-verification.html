@@ -12,38 +12,57 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Đảm bảo nội dung căn giữa theo chiều dọc */
+            height: 100vh;
+            background-color: #f2f2f2;
         }
 
-        /* Định dạng cho các phần tử trong form */
-        label {
-            margin-right: 10px; /* Khoảng cách giữa label và input */
+        /* Định dạng cho form */
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
-        input[type="text"] {
+        .form-container label {
+            margin-right: 10px;
+        }
+
+        .form-container input[type="text"] {
             padding: 5px;
         }
 
-        button[type="submit"] {
+        .form-container button[type="submit"] {
             margin-top: 10px;
-            padding: 5px 15px; /* Điều chỉnh kích thước của nút */
+            padding: 5px 15px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container button[type="submit"]:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="col-lg-6 col-md-8">
+    <div class="form-container">
         <form th:action="@{/otp-verification}" method="post">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div>
-                        <label for="otpCode">Nhập mã OTP:</label>
-                        <input type="text" id="otpCode" name="otpCode" required>
-                    </div>
-                    <div>
-                        <input type="hidden" name="email" th:value="${user.username}">
-                        <button type="submit">Xác thực</button>
-                    </div>
+            <div class="row justify-content-center">
+                <div>
+                    <label for="otpCode">Nhập mã OTP:</label>
+                    <input type="text" id="otpCode" name="otpCode" required>
+                </div>
+                <div>
+                    <button type="submit">Xác thực</button>
+                </div>
+                <hr>
+                </hr>
+                <div>
+                    <a class="nav-link" href="/">Trở về</a>
                 </div>
             </div>
         </form>

@@ -88,4 +88,5 @@ public class ChatMessage {
     // Constructors, getters, and setters
 
     // ... (các phương thức getters và setters khác)
+
 }

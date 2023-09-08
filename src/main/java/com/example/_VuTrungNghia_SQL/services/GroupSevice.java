@@ -68,4 +68,8 @@ public class GroupSevice {
 //        }
 //    }
 
+    public List<GroupChat> searchGroup(String keyword) {
+        return groupChatRepository.searchBooks(keyword.toLowerCase());
+    }
+
 }

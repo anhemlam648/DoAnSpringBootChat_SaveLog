@@ -26,5 +26,8 @@ public interface GroupChatRepository extends JpaRepository<GroupChat, Long> {
     @Query(value = "SELECT MAX(id) FROM GroupChat")
     Long findLatestGroupId();
 
+    @Query("SELECT b FROM GroupChat b WHERE LOWER(b.groupName) LIKE %:keyword%")
+            List<GroupChat> searchBooks(@Param("keyword") String keyword);
+
 
 }

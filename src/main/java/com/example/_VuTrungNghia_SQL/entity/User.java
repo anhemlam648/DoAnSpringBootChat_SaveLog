@@ -24,6 +24,15 @@ public class User {
     @Column(name = "password",length = 250,nullable = false)
     @NotBlank(message = "Password is required")
     private String password;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Column(name = "email",length = 50)
     @Size(max = 50, message = "Email must be less than 50 characters")
     private String email;
@@ -73,5 +82,7 @@ public class User {
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
     }
+
+
 
 }

@@ -5,6 +5,7 @@ import com.example._VuTrungNghia_SQL.entity.GroupChat;
 import com.example._VuTrungNghia_SQL.entity.GroupMember;
 import com.example._VuTrungNghia_SQL.entity.User;
 import com.example._VuTrungNghia_SQL.repository.GroupChatRepository;
+import com.example._VuTrungNghia_SQL.repository.MemberRepository;
 import com.example._VuTrungNghia_SQL.repository.MessageRepository;
 import com.example._VuTrungNghia_SQL.services.GroupSevice;
 import com.example._VuTrungNghia_SQL.services.MessageService;
@@ -18,6 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,6 +48,9 @@ public class MessageController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
 //    @Autowired
 //    private SimpMessagingTemplate messagingTemplate;
@@ -88,29 +95,55 @@ public class MessageController {
         return "chat/chat";
     }
 
-    @PostMapping("/create")
-    public String addChat(Model model, Principal principal, HttpServletRequest request) {
-        String loggedInUsername = principal.getName();
-        User loggedInUser = userService.getUserByUsername(loggedInUsername);
+//    @PostMapping("/create")
+//    public String addChat(Model model, Principal principal, HttpServletRequest request) {
+//        String loggedInUsername = principal.getName();
+//        User loggedInUser = userService.getUserByUsername(loggedInUsername);
+//
+//        String messageContent = request.getParameter("content"); // Lấy giá trị của trường tin nhắn
+//
+//        // Lấy người nhận tin nhắn (ở đây là một ví dụ, bạn cần cung cấp giá trị thích hợp)
+//        User receiverUser = userService.getUserByUsername("DEMO4");
+////        Long groupId = groupSevice.createGroupChatAndGetGroupId();
+//
+//        // Tạo đối tượng tin nhắn và đặt người gửi và người nhận
+//        ChatMessage chatMessage = new ChatMessage();
+//        chatMessage.setContent(messageContent);
+//        chatMessage.setSender(loggedInUser);
+//        chatMessage.setReceiver(receiverUser); // Đảm bảo bạn đã đặt giá trị cho receiver
+//        Long groupId = 1L;
+//        chatMessage.setGroupId(groupId);
+//        // Lưu tin nhắn ào cơ sở dữ liệu
+//        messageService.saveMessage(chatMessage);
+//
+//        return "redirect:/api/messages/" + groupId;
+//    }
+@PostMapping("/create")
+public String addChat(Model model, Principal principal, HttpServletRequest request) {
+    String loggedInUsername = principal.getName();
+    User loggedInUser = userService.getUserByUsername(loggedInUsername);
 
-        String messageContent = request.getParameter("content"); // Lấy giá trị của trường tin nhắn
+    String messageContent = request.getParameter("content"); // Lấy giá trị của trường tin nhắn
 
-        // Lấy người nhận tin nhắn (ở đây là một ví dụ, bạn cần cung cấp giá trị thích hợp)
-        User receiverUser = userService.getUserByUsername("DEMO4");
-//        Long groupId = groupSevice.createGroupChatAndGetGroupId();
+    // Lấy danh sách tất cả người dùng
+    List<User> allUsers = userService.getAllUser();
 
-        // Tạo đối tượng tin nhắn và đặt người gửi và người nhận
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setContent(messageContent);
-        chatMessage.setSender(loggedInUser);
-        chatMessage.setReceiver(receiverUser); // Đảm bảo bạn đã đặt giá trị cho receiver
-        Long groupId = 1L;
-        chatMessage.setGroupId(groupId);
-        // Lưu tin nhắn ào cơ sở dữ liệu
+    // Tạo đối tượng tin nhắn và đặt người gửi
+    ChatMessage chatMessage = new ChatMessage();
+    chatMessage.setContent(messageContent);
+    chatMessage.setSender(loggedInUser);
+    Long groupId = 1L;
+    chatMessage.setGroupId(groupId);
+
+    // Lặp qua danh sách người dùng và gửi tin nhắn cho mỗi người dùng
+    for (User receiverUser : allUsers) {
+        chatMessage.setReceiver(receiverUser);
+        // Lưu tin nhắn vào cơ sở dữ liệu
         messageService.saveMessage(chatMessage);
-
-        return "redirect:/api/messages/" + groupId;
     }
+
+    return "redirect:/api/messages/" + groupId;
+}
 //    @GetMapping("/messages")
 //    public String getAllMessages(Model model) {
 //        List<ChatMessage> messages = messageService.getAllMessages();
@@ -142,29 +175,26 @@ public String getMessagesForGroup(@PathVariable Long groupId, Model model) {
     model.addAttribute("messages", messages);
     model.addAttribute("groupId", groupId);
     return "chat/messages";
-}
+    }
+
+
     @GetMapping("/leave-group/{groupId}")
     public String leaveGroup(@PathVariable Long groupId, Principal principal) {
         // Lấy thông tin của nhóm chat
         GroupChat groupChat = groupChatRepository.findById(groupId).orElse(null);
 
         if (groupChat != null) {
-            // Kiểm tra xem người dùng có phải là thành viên của nhóm không
-            boolean isUserMember = isUserMember(groupChat, principal.getName());
-
-            if (isUserMember) {
-                // Người dùng là thành viên của nhóm, hãy xóa họ khỏi danh sách thành viên
-                removeUserFromGroup(groupChat, principal.getName());
-                groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() - 1);
-                groupChatRepository.save(groupChat);
-            }
+            // Xóa người dùng khỏi danh sách thành viên
+//            removeUserFromGroup(groupChat, principal.getName());
+            groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() - 1);
+            groupChatRepository.save(groupChat);
         }
 
         // Chuyển hướng người dùng đến trang khác sau khi rời nhóm (ví dụ: trang chính)
         return "redirect:/groupchat/list"; // Thay đổi đường dẫn tùy theo trang bạn muốn chuyển hướng sau khi rời nhóm.
     }
     private boolean isUserMember(GroupChat groupChat, String username) {
-        // Kiểm tra xem người dùng đã là thành viên của nhóm chưa
+        // Kiểm tra xem người dùng có trong danh sách thành viên của nhóm chat không
         List<GroupMember> groupMembers = groupChat.getGroupMembers();
         for (GroupMember member : groupMembers) {
             if (member.getUser().getUsername().equals(username)) {
@@ -184,6 +214,7 @@ public String getMessagesForGroup(@PathVariable Long groupId, Model model) {
         }
         groupChatRepository.save(groupChat);
     }
+
 
 //    @MessageMapping("/send")
 //    @SendTo("/topic/messages")
