@@ -59,4 +59,31 @@ public class UserService {
 //    public User findByEmail(String email) {
 //        return userRepository.findByEmail(email);
 //    }
+public void blockUser(Long userId) {
+    // Lấy thông tin người dùng từ cơ sở dữ liệu bằng userId
+    User user = userRepository.findById(userId).orElse(null);
+
+    // Kiểm tra xem người dùng có tồn tại không
+    if (user != null) {
+        // Cập nhật trạng thái block của người dùng thành "BLOCKED"
+        user.setBlockStatus("BLOCKED");
+
+        // Lưu thông tin người dùng đã cập nhật vào cơ sở dữ liệu
+        userRepository.save(user);
+    }
+}
+
+    public void unblockUser(Long userId) {
+        // Lấy thông tin người dùng từ cơ sở dữ liệu bằng userId
+        User user = userRepository.findById(userId).orElse(null);
+
+        // Kiểm tra xem người dùng có tồn tại không
+        if (user != null) {
+            // Cập nhật trạng thái block của người dùng thành "UNBLOCKED"
+            user.setBlockStatus("UNBLOCKED");
+
+            // Lưu thông tin người dùng đã cập nhật vào cơ sở dữ liệu
+            userRepository.save(user);
+        }
+    }
 }

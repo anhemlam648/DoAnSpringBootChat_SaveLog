@@ -83,6 +83,16 @@ public class User {
         this.emailVerified = emailVerified;
     }
 
+    @Column(name = "block_status", length = 10) // Độ dài phù hợp với chuỗi (vd: "BLOCKED" hoặc "UNBLOCKED")
+    private String blockStatus;
+
+    public String getBlockStatus() {
+        return blockStatus;
+    }
+
+    public void setBlockStatus(String blockStatus) {
+        this.blockStatus = blockStatus;
+    }
 
 
 }

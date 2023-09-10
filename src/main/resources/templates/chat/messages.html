@@ -83,6 +83,48 @@
       max-width: 100%;
       height: auto;
     }
+    .custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload:hover {
+    background-color: #0056b3;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #6a0dad; /* Màu tím đẹp */
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff; /* Màu nền cho phần container */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng đổ */
+}
+
+.chat-container {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  background-image: url('https://e0.pxfuel.com/wallpapers/416/425/desktop-wallpaper-black-car-neon-lamborghini-vehicle-artwork-rear-view-%E2%80%A2-for-you-for-mobile-electric-blue-car.jpg'); /* Thay 'your-background-image.jpg' bằng đường dẫn tới hình nền */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 400px;
+  overflow-y: scroll;
+}
   </style>
 </head>
 <body>
@@ -95,8 +137,7 @@
 
             <!-- Hiển thị hình ảnh đính kèm (nếu có) -->
             <div th:if="${message.attachedFileName}">
-                Attached File:
-                <a th:href="'/download/' + ${message.attachedFileName}" th:text="${message.attachedFileName}" download></a>
+                    File: <a th:href="'/download/' + ${message.attachedFileName}" th:text="${message.attachedFileName}" download></a>
             </div>
 <!--            <img style="height: 363px" th:src="${product.urlImageThumbnail}" class="card-img-top" alt="...">-->
         </div>
@@ -104,7 +145,10 @@
     <div class="chat-input">
         <form action="/api/create" method="post" enctype="multipart/form-data">
             <input type="text" class="input-field" name="content" placeholder="Type your message...">
-            <input type="file" name="file" accept="image/*">
+            <label class="custom-file-upload">
+                <input type="file" name="file" accept="image/*">
+                Choose File
+            </label>
             <button type="submit" class="send-button">Send</button>
         </form>
     </div>

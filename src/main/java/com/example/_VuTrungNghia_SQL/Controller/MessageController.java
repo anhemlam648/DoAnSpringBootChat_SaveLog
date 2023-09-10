@@ -160,14 +160,16 @@ public String addChat(
     String loggedInUsername = principal.getName();
     User loggedInUser = userService.getUserByUsername(loggedInUsername);
 
+    // Xác định người dùng cần chặn
+    // ...
+
     // Tạo đối tượng tin nhắn và đặt người gửi
-    ChatMessage chatMessage = new ChatMessage();
-    chatMessage.setContent(messageContent);
-    chatMessage.setSender(loggedInUser);
-    Long groupId = 1L; // Thay đổi groupId theo nhu cầu của bạn
-    chatMessage.setGroupId(groupId);
+    Long groupId = 2L; // Thay đổi groupId theo nhu cầu của bạn
 
     // Xử lý file đính kèm (nếu có)
+    byte[] attachedFileData = null;
+    String attachedFileName = null;
+
     if (!file.isEmpty()) {
         long fileSize = file.getSize(); // Lấy kích thước tệp (byte)
 
@@ -177,48 +179,63 @@ public String addChat(
         } else {
             try {
                 // Lưu dữ liệu của file vào tin nhắn
-                chatMessage.setAttachedFile(file.getBytes());
-                chatMessage.setAttachedFileName(file.getOriginalFilename());
+                attachedFileData = file.getBytes();
+                attachedFileName = file.getOriginalFilename();
             } catch (IOException e) {
                 // Xử lý lỗi nếu có
             }
         }
     }
+    ChatMessage newChatMessage = new ChatMessage();
+    // Kiểm tra xem người gửi có bị chặn không
+    if (!"BLOCKED".equals(loggedInUser.getBlockStatus())) {
+        // Lặp qua danh sách người dùng và gửi tin nhắn cho mỗi người dùng không bị chặn
+        List<User> allUsers = userService.getAllUser();
+        for (User receiverUser : allUsers) {
+            // Kiểm tra xem người nhận có phải là người dùng bị chặn không
+            if (!"BLOCKED".equals(receiverUser.getBlockStatus())) {
+                // Tạo một tin nhắn mới cho mỗi người nhận
+                newChatMessage.setContent(messageContent);
+                newChatMessage.setSender(loggedInUser);
+                newChatMessage.setGroupId(groupId);
+                newChatMessage.setReceiver(receiverUser);
 
-    // Lặp qua danh sách người dùng và gửi tin nhắn cho mỗi người dùng
-    List<User> allUsers = userService.getAllUser();
-    for (User receiverUser : allUsers) {
-        chatMessage.setReceiver(receiverUser);
-        // Lưu tin nhắn vào cơ sở dữ liệu (nếu bạn muốn)
-        messageService.saveMessage(chatMessage);
+                // Đặt file đính kèm nếu có
+                newChatMessage.setAttachedFile(attachedFileData);
+                newChatMessage.setAttachedFileName(attachedFileName);
+
+                // Lưu tin nhắn vào cơ sở dữ liệu (nếu bạn muốn)
+                messageService.saveMessage(newChatMessage);
+            }
+        }
     }
 
     return "redirect:/api/messages/" + groupId;
 }
 
-    @GetMapping("/download/{messageId}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable Long messageId) {
-        // Retrieve the ChatMessage with the given ID from your service
-        ChatMessage chatMessage = messageService.getMessageById(messageId);
-
-        if (chatMessage != null && chatMessage.getAttachedFile() != null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", chatMessage.getAttachedFileName());
-
-            // Return the binary data and headers as a ResponseEntity
-            return new ResponseEntity<>(chatMessage.getAttachedFile(), headers, HttpStatus.OK);
-        } else {
-            // Handle the case where the file or message does not exist
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/block/{id}")
+    public String blockUser(@PathVariable Long id) {
+        // Cập nhật trạng thái block của người dùng với ID = id thành true
+        userService.blockUser(id);
+        return "redirect:/show/users"; // Chuyển hướng lại danh sách người dùng
     }
+
+    @GetMapping("/unblock/{id}")
+    public String unblockUser(@PathVariable Long id) {
+        // Cập nhật trạng thái block của người dùng với ID = id thành false
+        userService.unblockUser(id);
+        return "redirect:/show/users"; // Chuyển hướng lại danh sách người dùng
+    }
+
+//
+
 //    @GetMapping("/messages")
 //    public String getAllMessages(Model model) {
 //        List<ChatMessage> messages = messageService.getAllMessages();
 //        model.addAttribute("messages", messages);
 //        return "chat/messages"; // Điều hướng đến trang hiển thị tin nhắn
 //    }
+
 //@GetMapping("/messages/{groupId}")
 //public String getMessagesForGroup(@PathVariable Long groupId, Model model) {
 //    // Lấy danh sách tin nhắn cho nhóm chat cụ thể (sử dụng groupId để xác định nhóm chat)

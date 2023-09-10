@@ -28,6 +28,13 @@
       <td>
         <a th:href="@{/show/edit/{id}(id=${user.id})}">Edit</a> |
         <a th:href="@{/show/delete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+        |
+        <!-- Hiển thị nút "block" nếu người dùng chưa bị block -->
+        <a  th:href="@{/api/block/{id}(id=${user.id})}">Block</a>
+        |
+        <!-- Hiển thị nút "mở block" nếu người dùng đã bị block -->
+        <a  th:href="@{/api/unblock/{id}(id=${user.id})}">Unblock</a>
+
       </td>
     </tr>
   </table>
