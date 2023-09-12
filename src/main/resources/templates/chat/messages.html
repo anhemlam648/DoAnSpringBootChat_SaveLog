@@ -4,14 +4,21 @@
     <meta charset="UTF-8">
     <title>Chat Room</title>
     <style>
-    body {
-      font-family: Arial, sans-serif;
+        body {
+        font-family: Arial, sans-serif;
+        background-image: url('https://haycafe.vn/wp-content/uploads/2022/01/Hinh-nen-trang-dep-4K.jpg'); /* Replace 'your-image-url.jpg' with the URL of your background image */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
     }
 
     .container {
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
+
+    flex-direction: row; /* Sắp xếp các phần tử theo chiều ngang */
+    align-items: center;
     }
 
     .chat-container {
@@ -118,12 +125,23 @@ body {
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 10px;
-  background-image: url('https://e0.pxfuel.com/wallpapers/416/425/desktop-wallpaper-black-car-neon-lamborghini-vehicle-artwork-rear-view-%E2%80%A2-for-you-for-mobile-electric-blue-car.jpg'); /* Thay 'your-background-image.jpg' bằng đường dẫn tới hình nền */
+  background-image: url('https://w.forfun.com/fetch/15/153332aa7d41077b3ce626cadb18a2a2.jpeg'); /* Thay 'your-background-image.jpg' bằng đường dẫn tới hình nền */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   height: 400px;
   overflow-y: scroll;
+}
+.message-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-status {
+    margin-top: 10px; /* Điều chỉnh khoảng cách giữa nội dung và trạng thái */
+}
+.message-status {
+    margin-left: 10px; /* Khoảng cách giữa các phần tử */
 }
   </style>
 </head>
@@ -134,12 +152,61 @@ body {
         <div th:each="message : ${messages}" class="message-container">
             <span class="message-sender" th:text="${message.sender.username}"></span>
             <div class="message-text" th:text="${message.content}"></div>
-
             <!-- Hiển thị hình ảnh đính kèm (nếu có) -->
-            <div th:if="${message.attachedFileName}">
+            <div class="message-status" th:if="${message.attachedFileName}">
                     File: <a th:href="'/download/' + ${message.attachedFileName}" th:text="${message.attachedFileName}" download></a>
             </div>
-<!--            <img style="height: 363px" th:src="${product.urlImageThumbnail}" class="card-img-top" alt="...">-->
+            <!-- Hiển thị trạng thái đã gửi/nhận, đã xem -->
+            <div class="message-status">
+                <span class="status-sent" th:text="${message.sent}" style="color: pink;"></span>
+<!--                <span class="status-seen" th:text="${message.seen}" style="color: pink;"></span>-->
+            </div>
+
+<!--            &lt;!&ndash; Nút để xác nhận đã xem &ndash;&gt;-->
+<!--            &lt;!&ndash; Nút để xác nhận đã xem &ndash;&gt;-->
+<!--            <button th:if="${message.seen != 'đã xem'}" onclick="markAsSeen([[${message.id}]])" style="background-color: pink; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Xác nhận đã xem</button>-->
+<!--&lt;!&ndash;            <img style="height: 363px" th:src="${product.urlImageThumbnail}" class="card-img-top" alt="...">&ndash;&gt;-->
+<!--                   <script>-->
+<!--                       function markAsSeen(messageId) {-->
+<!--                console.log('Button clicked for messageId: ' + messageId);-->
+
+<!--                // Send a POST request to update the "seen" status-->
+<!--                fetch('/api/updateSeenStatus/' + messageId, {-->
+<!--                    method: 'POST',-->
+<!--                    headers: {-->
+<!--                        'Content-Type': 'application/json',-->
+<!--                    },-->
+<!--                    body: JSON.stringify({ seen: 'đã xem' }),-->
+<!--                })-->
+<!--                .then(response => response.json())-->
+<!--                .then(data => {-->
+<!--                    // Xử lý kết quả từ API (nếu cần)-->
+
+<!--                    // Fetch the updated message data from the server-->
+<!--                    fetch('/api/getMessage/' + messageId)-->
+<!--                    .then(response => response.json())-->
+<!--                    .then(updatedMessage => {-->
+<!--                        // Find the message container by ID-->
+<!--                        var message = document.getElementById('message-' + messageId);-->
+
+<!--                        // Update the content and "seen" status in the message container-->
+<!--                        var messageContent = message.querySelector('.message-text');-->
+<!--                        var statusSeen = message.querySelector('.status-seen');-->
+<!--                        messageContent.textContent = updatedMessage.content;-->
+<!--                        statusSeen.textContent = updatedMessage.seen;-->
+
+<!--                        // Tùy chỉnh các xử lý khác sau khi đã xác nhận đã xem-->
+<!--                    })-->
+<!--                    .catch(error => {-->
+<!--                        console.error('Lỗi khi lấy dữ liệu tin nhắn: ' + error);-->
+<!--                    });-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error('Lỗi khi gọi API: ' + error);-->
+<!--                });-->
+<!--            }-->
+
+<!--                   </script>-->
         </div>
     </div>
     <div class="chat-input">

@@ -33,8 +33,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api")
@@ -162,9 +164,11 @@ public String addChat(
 
     // Xác định người dùng cần chặn
     // ...
+    loggedInUser.setOnlineStatus("ONLINE");
+    userService.save(loggedInUser);
 
     // Tạo đối tượng tin nhắn và đặt người gửi
-    Long groupId = 2L; // Thay đổi groupId theo nhu cầu của bạn
+    Long groupId = 1L; // Thay đổi groupId theo nhu cầu của bạn
 
     // Xử lý file đính kèm (nếu có)
     byte[] attachedFileData = null;
@@ -199,7 +203,15 @@ public String addChat(
                 newChatMessage.setSender(loggedInUser);
                 newChatMessage.setGroupId(groupId);
                 newChatMessage.setReceiver(receiverUser);
-
+                if (receiverUser.equals(loggedInUser)) {
+                    // Nếu người nhận là người gửi, đánh dấu là "đã gửi" và "chưa xem"
+                    newChatMessage.setSent("đã gửi");
+                    newChatMessage.setSeen("đã nhận");
+                } else {
+                    // Nếu không phải người gửi, đánh dấu là "đã gửi" và "chưa xem"
+                    newChatMessage.setSent("đã gửi");
+                    newChatMessage.setSeen("đã nhận");
+                }
                 // Đặt file đính kèm nếu có
                 newChatMessage.setAttachedFile(attachedFileData);
                 newChatMessage.setAttachedFileName(attachedFileName);
@@ -226,6 +238,16 @@ public String addChat(
         userService.unblockUser(id);
         return "redirect:/show/users"; // Chuyển hướng lại danh sách người dùng
     }
+
+    @PostMapping("/updateSeenStatus/{messageId}")
+    public ResponseEntity<String> updateSeenStatus(@PathVariable Long messageId, @RequestBody Map<String, String> requestBody) {
+        String seenStatus = requestBody.get("seen");
+
+        messageService.markMessageAsSeen(messageId);
+
+        return ResponseEntity.ok("Trạng thái đã xem đã được cập nhật.");
+    }
+
 
 //
 
@@ -269,11 +291,16 @@ public String addChat(
         // Lấy thông tin của nhóm chat
         GroupChat groupChat = groupChatRepository.findById(groupId).orElse(null);
 
+
         if (groupChat != null) {
             // Xóa người dùng khỏi danh sách thành viên
 //            removeUserFromGroup(groupChat, principal.getName());
             groupChat.setNumberOfMembers(groupChat.getNumberOfMembers() - 1);
             groupChatRepository.save(groupChat);
+
+            User loggedInUser = userService.getUserByUsername(principal.getName());
+            loggedInUser.setOnlineStatus("OFFLINE");
+            userService.save(loggedInUser);
         }
 
         // Chuyển hướng người dùng đến trang khác sau khi rời nhóm (ví dụ: trang chính)
@@ -315,5 +342,22 @@ public String addChat(
 //        );
 //
 //        return chatMessage;
+//    }
+//    @GetMapping("/intro")
+//    public String show()
+//    {
+//        return "introduction/introduction";
+//    }
+//    @PostMapping("/login")
+//    public String login(HttpServletRequest request, @RequestParam("username") String username, @RequestParam("password") String password) {
+//        // Thực hiện đăng nhập logic ở đây
+//
+//        // Sau khi đăng nhập thành công, cập nhật trạng thái người dùng thành "ONLINE"
+//        User user = userService.getUserByUsername(username);
+//        if (user != null) {
+//            user.setOnlineStatus("ONLINE");
+//            userService.save(user); // Cập nhật thông tin người dùng vào cơ sở dữ liệu
+//        }
+//        return "home/index";
 //    }
 }

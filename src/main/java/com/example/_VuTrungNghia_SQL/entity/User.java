@@ -94,5 +94,19 @@ public class User {
         this.blockStatus = blockStatus;
     }
 
+    public String getOnlineStatus() {
+        return onlineStatus;
+    }
+
+    public void setOnlineStatus(String onlineStatus) {
+        this.onlineStatus = onlineStatus;
+    }
+
+    @Column(name = "online_status", length = 10)
+    private String onlineStatus;
+
+    // Sử dụng lớp Status để lưu trạng thái người dùng
+
+
 
 }

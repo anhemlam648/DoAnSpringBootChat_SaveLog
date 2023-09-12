@@ -4,10 +4,12 @@ package com.example._VuTrungNghia_SQL.services;
 
 import com.example._VuTrungNghia_SQL.entity.Book;
 import com.example._VuTrungNghia_SQL.entity.ChatMessage;
+//import com.example._VuTrungNghia_SQL.entity.Status;
 import com.example._VuTrungNghia_SQL.entity.User;
 
 //import com.example._VuTrungNghia_SQL.repository.IroleRepository;
 import com.example._VuTrungNghia_SQL.repository.IuserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
     private IuserRepository userRepository;
+
+//    @Autowired
+//    private StatusService statusService;
 
 
 //    @Autowired
@@ -86,4 +92,9 @@ public void blockUser(Long userId) {
             userRepository.save(user);
         }
     }
+
+    public void updateUser(User user) {
+        userRepository.save(user); // Sử dụng phương thức save() để cập nhật hoặc thêm mới người dùng
+    }
+
 }

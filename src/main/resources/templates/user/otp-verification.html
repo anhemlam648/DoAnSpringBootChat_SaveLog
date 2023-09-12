@@ -8,21 +8,26 @@
     <th:block th:replace="~{layout :: Link-css}"></th:block>
     <style>
         /* Định dạng cho container chính */
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f2f2f2;
-        }
+     /* Định dạng cho container chính */
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-image: url('https://wallpaperaccess.com/full/1159705.jpg'); /* Đường dẫn đến hình nền */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center center;
+    }
 
-        /* Định dạng cho form */
-        .form-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
+    /* Định dạng cho form-container */
+    .form-container {
+        background-color: rgba(255, 255, 255, 0.8); /* Màu nền của form-container với độ trong suốt */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
 
         .form-container label {
             margin-right: 10px;

@@ -109,4 +109,25 @@ public class ChatMessage {
     }
 
     private String attachedFileName;
+
+    public String getSent() {
+        return sent;
+    }
+
+    public void setSent(String sent) {
+        this.sent = sent;
+    }
+
+    public String getSeen() {
+        return seen;
+    }
+
+    public void setSeen(String seen) {
+        this.seen = seen;
+    }
+
+    @Column(name = "sent_status")
+    private String sent;
+    @Column(name = "seen_status")
+    private String seen;
 }

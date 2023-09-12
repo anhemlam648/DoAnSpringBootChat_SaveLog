@@ -5,10 +5,13 @@ import com.example._VuTrungNghia_SQL.entity.ChatMessage; // Đổi import này
 import com.example._VuTrungNghia_SQL.entity.GroupMember;
 import com.example._VuTrungNghia_SQL.entity.User;
 import com.example._VuTrungNghia_SQL.repository.MessageRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MessageService {
@@ -47,5 +50,16 @@ public class MessageService {
     public ChatMessage getMessageById(Long messageId) {
         // Thực hiện logic để tìm tin nhắn theo ID và trả về
         return messageRepository.findById(messageId).orElse(null);
+    }
+
+    // Triển khai phương thức findMessageById
+    public ChatMessage findMessageById(Long messageId) {
+        return messageRepository.findById(messageId).orElse(null);
+    }
+
+    @Transactional
+    @Modifying
+    public void markMessageAsSeen(Long messageId) {
+        messageRepository.updateSeenStatus(messageId, "đã xem");
     }
 }

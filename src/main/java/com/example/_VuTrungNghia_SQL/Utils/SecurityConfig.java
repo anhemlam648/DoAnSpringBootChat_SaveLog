@@ -55,14 +55,15 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/")
                         .permitAll()
-
-                ) .oauth2Login(oauth2Login -> oauth2Login
-                        .loginPage("/login") // If you want to customize the OAuth2 login page
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oAuth2UserService) // Set your OAuth2 user service here
-                        )
-                        .successHandler(oAuth2LoginSuccessHandler) // Set your OAuth2 success handler here
                 )
+
+//                ) .oauth2Login(oauth2Login -> oauth2Login
+//                        .loginPage("/login") // If you want to customize the OAuth2 login page
+//                        .userInfoEndpoint(userInfo -> userInfo
+//                                .userService(oAuth2UserService) // Set your OAuth2 user service here
+//                        )
+//                        .successHandler(oAuth2LoginSuccessHandler) // Set your OAuth2 success handler here
+//                )
                 .rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret")
                         .tokenValiditySeconds(86400)
                         .userDetailsService(userDetailsService())

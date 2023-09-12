@@ -4,6 +4,30 @@
   <meta charset="UTF-8">
   <title>User</title>
   <th:block th:replace="Layout :: Link-css"></th:block>
+  <style>
+    body {
+        background-image: url('https://img2.thuthuatphanmem.vn/uploads/2018/11/30/anh-nen-mau-trang-hong_104324112.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    .status-icon {
+        width: 20px; /* Điều chỉnh kích thước biểu tượng trạng thái */
+        height: 20px;
+        vertical-align: middle; /* Căn giữa biểu tượng */
+    }
+
+    .online-icon {
+        content: url('https://as2.ftcdn.net/v2/jpg/00/33/52/49/1000_F_33524989_ZjnZJa6eQRvLoHl0LP125yU09bJPGT7g.jpg'); /* Đường dẫn đến biểu tượng trạng thái "online" */
+    }
+
+    .offline-icon {
+        content: url('https://t3.ftcdn.net/jpg/00/33/52/72/360_F_33527270_JWuI7jOK8TKf3FrAK2VL7JSvhkAv5F0F.webp'); /* Đường dẫn đến biểu tượng trạng thái "offline" */
+    }
+  </style>
 </head>
 <body>
 <th:block th:replace="Layout :: header"></th:block>
@@ -17,6 +41,8 @@
       <th>Name</th>
       <th>Ngaysinh</th>
       <th>Gioitinh</th>
+      <th>Status</th>
+      <th>Actions</th>
     </tr>
     <tr th:each="user : ${users}">
       <td th:text="${user.id}"></td>
@@ -26,15 +52,14 @@
       <td th:text="${user.Ngaysinh}"></td>
       <td th:text="${user.Gioitinh}"></td>
       <td>
+        <span th:if="${user.onlineStatus == 'ONLINE'}" class="status-icon online-icon"></span>
+        <span th:if="${user.onlineStatus == 'OFFLINE'}" class="status-icon offline-icon"></span>
+      </td>
+      <td>
         <a th:href="@{/show/edit/{id}(id=${user.id})}">Edit</a> |
-        <a th:href="@{/show/delete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')">Delete</a>
-        |
-        <!-- Hiển thị nút "block" nếu người dùng chưa bị block -->
-        <a  th:href="@{/api/block/{id}(id=${user.id})}">Block</a>
-        |
-        <!-- Hiển thị nút "mở block" nếu người dùng đã bị block -->
-        <a  th:href="@{/api/unblock/{id}(id=${user.id})}">Unblock</a>
-
+        <a th:href="@{/show/delete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')">Delete</a> |
+        <a th:href="@{/api/block/{id}(id=${user.id})}">Block</a> |
+        <a th:href="@{/api/unblock/{id}(id=${user.id})}">Unblock</a>
       </td>
     </tr>
   </table>

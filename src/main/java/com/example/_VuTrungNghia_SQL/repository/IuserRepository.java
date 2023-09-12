@@ -20,6 +20,7 @@ public interface IuserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.username = ?1")
     User findByUsername(String username);
 
+
 //    @Modifying
 //    @Transactional
 //    @Query(value = "INSERT INTO user_role (user_id, role_id) " +

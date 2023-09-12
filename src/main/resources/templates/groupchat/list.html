@@ -52,8 +52,13 @@
         });
     </script>
     <style>
+
         body {
-            background-color: #6b5b95; /* Màu nền tím */
+        background-image: url('https://img2.thuthuatphanmem.vn/uploads/2018/11/30/anh-nen-mau-trang-hong_104324112.jpg'); /* Đường dẫn đến hình ảnh nền */
+        background-repeat: no-repeat; /* Không lặp lại hình ảnh nền */
+        background-size: cover; /* Kéo dãn hình ảnh để nó phù hợp với kích thước của body */
+        background-position: center center; /* Canh giữa hình ảnh nền */
+
             color: #fff; /* Màu chữ trắng */
             font-family: Arial, sans-serif;
         }
@@ -78,7 +83,7 @@
 <div class="container">
     <form th:action="@{/groupchat/search}" method="GET" class="mb-3">
         <div class="input-group">
-            <input type="text" class="form-control" name="keyword" placeholder="Search by name" style="background-color: #b366ff;">
+            <input type="text" class="form-control" name="keyword" placeholder="Search by name" style="background-color: white;">
             <div id="autocompleteContainer"></div>
             <button class="btn btn-primary" type="submit">Search</button>
         </div>

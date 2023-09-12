@@ -53,6 +53,7 @@ public class ShowUserController {
         editUser.setEmail(user.getEmail());
         editUser.setGioitinh(user.getGioitinh());
         editUser.setNgaysinh(user.getNgaysinh());
+        editUser.setOnlineStatus(user.getOnlineStatus());
         userRepository.save(editUser);
         return "redirect:/show/users";
     }

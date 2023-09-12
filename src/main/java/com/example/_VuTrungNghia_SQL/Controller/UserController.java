@@ -1,10 +1,13 @@
 package com.example._VuTrungNghia_SQL.Controller;
 
+//import com.example._VuTrungNghia_SQL.entity.Status;
 import com.example._VuTrungNghia_SQL.repository.IuserRepository;
 import com.example._VuTrungNghia_SQL.services.EmailService;
+
 import com.example._VuTrungNghia_SQL.services.UserService;
 import com.example._VuTrungNghia_SQL.entity.User;
 import com.example._VuTrungNghia_SQL.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Controller
@@ -26,7 +27,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private IuserRepository iuserRepository;
+    private IuserRepository userRepository;
     private String storedOTP;
     @Autowired
     private EmailService emailService;
@@ -41,6 +42,19 @@ public class UserController {
         model.addAttribute("user",new User());
         return "user/register";
     }
+
+
+//
+//        // Thực hiện đăng xuất logic ở đây
+//
+//        return "redirect:/";
+//    }
+
+    //
+//        // Your logout logic here
+//
+//        return "redirect:/login";
+//    }
 //    @PostMapping("/register")
 //    public String register(@Valid @ModelAttribute("user") User user, BindingResult bindingResult,Model model)
 //    {
@@ -133,7 +147,7 @@ public class UserController {
     public String verifyOTP(@RequestParam("otpCode") String otpCode, Model model) {
         // Lấy danh sách người dùng từ cơ sở dữ liệu bằng email
         String emailToSearch = "vunghia467@gmail.com";
-        List<User> users = iuserRepository.findByEmail(emailToSearch);
+        List<User> users = userRepository.findByEmail(emailToSearch);
 
         // Kiểm tra xem có người dùng nào khớp với mã OTP
         for (User user : users) {
@@ -151,5 +165,17 @@ public class UserController {
         model.addAttribute("otp_error", "Mã OTP không hợp lệ hoặc không khớp. Vui lòng thử lại.");
         return "user/otp-verification";
     }
+//    @GetMapping("/logout")
+//    public String processLogout(@SessionAttribute("loggedInUser") User loggedInUser) {
+//        if (loggedInUser != null) {
+//            // Cập nhật trạng thái người dùng thành "OFFLINE" khi đăng xuất
+//            loggedInUser.getStatus();
+//            loggedInUser.setStatus("offline");
+//            userService.save(loggedInUser); // Lưu trạng thái vào cơ sở dữ liệu
+//        }
+//
+//        // Xóa thông tin người dùng khỏi session và đăng xuất
+//        return "redirect:/login";
+//    }
 
 }
