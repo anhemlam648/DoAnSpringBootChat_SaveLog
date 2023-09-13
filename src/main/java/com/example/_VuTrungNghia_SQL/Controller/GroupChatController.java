@@ -9,6 +9,8 @@ import com.example._VuTrungNghia_SQL.repository.MemberRepository;
 import com.example._VuTrungNghia_SQL.services.GroupSevice;
 import com.example._VuTrungNghia_SQL.services.MemberSevice;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +28,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/groupchat")
 public class GroupChatController {
+    private static final Logger logInfo = LoggerFactory.getLogger(GroupChatController.class);
     @Autowired
     private GroupChatRepository groupChatRepository;
 
@@ -79,6 +82,7 @@ public class GroupChatController {
             model.addAttribute("member", memberSevice.getAllMember());
             return "groupchat/create";
         }
+        logInfo.info("Người dùng vừa tạo nhóm");
         groupSevice.save(groupChat);
         return "redirect:/groupchat/list";
     }

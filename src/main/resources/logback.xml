@@ -1,0 +1,33 @@
+<configuration status="INFO">
+    <include resource="org/springframework/boot/logging/logback/default.xml"/>
+    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- Đổi tên tệp log thành "app.log" -->
+    <property name="LOG_FILE" value="app.log"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.%i</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10KB</MaxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d [%t] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <loggers>
+        <!-- Cấu hình logger cho package/controller cụ thể (ví dụ) -->
+        <logger name="com.example._VuTrungNghia_SQL.Controller" level="DEBUG"/>
+    </loggers>
+</configuration>

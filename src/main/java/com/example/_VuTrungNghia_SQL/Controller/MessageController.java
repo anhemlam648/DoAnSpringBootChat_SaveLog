@@ -168,7 +168,7 @@ public String addChat(
     userService.save(loggedInUser);
 
     // Tạo đối tượng tin nhắn và đặt người gửi
-    Long groupId = 1L; // Thay đổi groupId theo nhu cầu của bạn
+    Long groupId = 2L; // Thay đổi groupId theo nhu cầu của bạn
 
     // Xử lý file đính kèm (nếu có)
     byte[] attachedFileData = null;

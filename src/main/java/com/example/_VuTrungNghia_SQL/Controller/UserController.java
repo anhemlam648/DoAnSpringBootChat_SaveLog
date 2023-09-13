@@ -10,6 +10,8 @@ import com.example._VuTrungNghia_SQL.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -22,8 +24,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+
 @Controller
 public class UserController {
+    private static final Logger logInfo = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
     @Autowired
@@ -34,6 +38,7 @@ public class UserController {
     @GetMapping("/login")
     public String login()
     {
+        logInfo.info("Người dùng vừa vào trang đăng nhập");
         return "user/login";
     }
     @GetMapping("/register")
@@ -93,6 +98,7 @@ public class UserController {
         model.addAttribute("email_error", "Lỗi khi gửi email xác thực.");
         return "user/register";
     }
+    logInfo.info("Người dùng vừa đăng ký");
     user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
     userService.save(user);
     return "redirect:/otp-verification"; // Chuyển hướng đến trang xác thực OTP
