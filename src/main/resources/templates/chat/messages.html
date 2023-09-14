@@ -151,7 +151,8 @@ body {
     <div class="chat-container" id="chatMessages">
         <div th:each="message : ${messages}" class="message-container">
             <span class="message-sender" th:text="${message.sender.username}"></span>
-            <div class="message-text" th:text="${message.content}"></div>
+<!--            <div class="message-text" th:text="${message.content}"></div>-->
+            <div class="message-text" th:text="${message.decrypted}"></div>
             <!-- Hiển thị hình ảnh đính kèm (nếu có) -->
             <div class="message-status" th:if="${message.attachedFileName}">
                     File: <a th:href="'/download/' + ${message.attachedFileName}" th:text="${message.attachedFileName}" download></a>

@@ -130,4 +130,18 @@ public class ChatMessage {
     private String sent;
     @Column(name = "seen_status")
     private String seen;
+
+    public String getDecrypted() {
+        return decrypted;
+    }
+
+    public void setDecrypted(String decrypted) {
+        this.decrypted = decrypted;
+    }
+
+    private String decrypted; // Add this field
+
+    // Constructors, getters, and setters for other fields
+
+
 }

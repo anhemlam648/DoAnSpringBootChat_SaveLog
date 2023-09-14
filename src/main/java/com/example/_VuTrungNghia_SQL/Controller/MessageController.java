@@ -30,13 +30,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/api")
@@ -151,6 +152,97 @@ public class MessageController {
 //
 //    return "redirect:/api/messages/" + groupId;
 //}
+//@PostMapping("/create")
+//public String addChat(
+//        Model model,
+//        Principal principal,
+//        @RequestParam("content") String messageContent,
+//        @RequestParam("file") MultipartFile file
+//) {
+//    // Lấy thông tin người dùng đã đăng nhập
+//    String loggedInUsername = principal.getName();
+//    User loggedInUser = userService.getUserByUsername(loggedInUsername);
+//
+//    // Xác định người dùng cần chặn
+//    // ...
+//    loggedInUser.setOnlineStatus("ONLINE");
+//    userService.save(loggedInUser);
+//
+//    // Tạo đối tượng tin nhắn và đặt người gửi
+//    Long groupId = 2L; // Thay đổi groupId theo nhu cầu của bạn
+//
+//    // Xử lý file đính kèm (nếu có)
+//    byte[] attachedFileData = null;
+//    String attachedFileName = null;
+//
+//    if (!file.isEmpty()) {
+//        long fileSize = file.getSize(); // Lấy kích thước tệp (byte)
+//
+//        // Kiểm tra kích thước tệp (ví dụ: giới hạn 1MB)
+//        if (fileSize > 1 * 1024 * 1024) {
+//            // Xử lý lỗi nếu tệp quá lớn
+//        } else {
+//            try {
+//                // Lưu dữ liệu của file vào tin nhắn
+//                attachedFileData = file.getBytes();
+//                attachedFileName = file.getOriginalFilename();
+//            } catch (IOException e) {
+//                // Xử lý lỗi nếu có
+//            }
+//        }
+//    }
+//    // Mã hóa nội dung tin nhắn trước khi lưu vào cơ sở dữ liệu
+//    String encryptedMessageContent = null;
+//    try {
+//        // Tạo một khóa mã hóa cho client hiện tại (sử dụng ví dụ là AES)
+//        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+//        keyGenerator.init(128); // Độ dài của khóa (ở đây là 128 bit)
+//        SecretKey clientEncryptionKey = keyGenerator.generateKey();
+//
+//        // Mã hóa nội dung tin nhắn
+//        Cipher cipher = Cipher.getInstance("AES");
+//        cipher.init(Cipher.ENCRYPT_MODE, clientEncryptionKey);
+//        byte[] encryptedBytes = cipher.doFinal(messageContent.getBytes());
+//
+//        // Chuyển mảng bytes mã hóa thành một chuỗi Base64 để lưu vào cơ sở dữ liệu
+//        encryptedMessageContent = Base64.getEncoder().encodeToString(encryptedBytes);
+//    } catch (Exception e) {
+//        // Xử lý lỗi nếu có
+//    }
+//    ChatMessage newChatMessage = new ChatMessage();
+//    // Kiểm tra xem người gửi có bị chặn không
+//    if (!"BLOCKED".equals(loggedInUser.getBlockStatus())) {
+//        // Lặp qua danh sách người dùng và gửi tin nhắn cho mỗi người dùng không bị chặn
+//        List<User> allUsers = userService.getAllUser();
+//        for (User receiverUser : allUsers) {
+//            // Kiểm tra xem người nhận có phải là người dùng bị chặn không
+//            if (!"BLOCKED".equals(receiverUser.getBlockStatus())) {
+//                // Tạo một tin nhắn mới cho mỗi người nhận
+//                newChatMessage.setContent(messageContent);
+//                newChatMessage.setSender(loggedInUser);
+//                newChatMessage.setGroupId(groupId);
+//                newChatMessage.setReceiver(receiverUser);
+//                if (receiverUser.equals(loggedInUser)) {
+//                    // Nếu người nhận là người gửi, đánh dấu là "đã gửi" và "chưa xem"
+//                    newChatMessage.setSent("đã gửi");
+//                    newChatMessage.setSeen("đã nhận");
+//                } else {
+//                    // Nếu không phải người gửi, đánh dấu là "đã gửi" và "chưa xem"
+//                    newChatMessage.setSent("đã gửi");
+//                    newChatMessage.setSeen("đã nhận");
+//                }
+//                // Đặt file đính kèm nếu có
+//                newChatMessage.setAttachedFile(attachedFileData);
+//                newChatMessage.setAttachedFileName(attachedFileName);
+//
+//                // Lưu tin nhắn vào cơ sở dữ liệu (nếu bạn muốn)
+//                messageService.saveMessage(newChatMessage);
+//            }
+//        }
+//    }
+//
+//    return "redirect:/api/messages/" + groupId;
+//}
 @PostMapping("/create")
 public String addChat(
         Model model,
@@ -190,7 +282,34 @@ public String addChat(
             }
         }
     }
+    byte[] encryptedBytes = null;
+
+    // Mã hóa nội dung tin nhắn trước khi lưu vào cơ sở dữ liệu
+    String encryptedMessageContent = null;
+    SecretKey clientEncryptionKey = null;
+
+    try {
+        // Tạo một khóa mã hóa cho client hiện tại
+        clientEncryptionKey = MessageEncryp.generateEncryptionKey();
+
+        // Mã hóa nội dung tin nhắn
+        encryptedBytes = MessageEncryp.encryptMessage(messageContent, clientEncryptionKey);
+
+        // Chuyển mảng bytes mã hóa thành một chuỗi Base64 để lưu vào cơ sở dữ liệu
+        encryptedMessageContent = Base64.getEncoder().encodeToString(encryptedBytes);
+    } catch (Exception e) {
+        // Xử lý lỗi nếu có
+    }
+
+    String decrypted = null;
+    try {
+        decrypted= MessageEncryp.decryptMessage(encryptedBytes, clientEncryptionKey);
+    } catch (Exception e) {
+        // Handle decryption errors
+    }
+
     ChatMessage newChatMessage = new ChatMessage();
+
     // Kiểm tra xem người gửi có bị chặn không
     if (!"BLOCKED".equals(loggedInUser.getBlockStatus())) {
         // Lặp qua danh sách người dùng và gửi tin nhắn cho mỗi người dùng không bị chặn
@@ -199,10 +318,11 @@ public String addChat(
             // Kiểm tra xem người nhận có phải là người dùng bị chặn không
             if (!"BLOCKED".equals(receiverUser.getBlockStatus())) {
                 // Tạo một tin nhắn mới cho mỗi người nhận
-                newChatMessage.setContent(messageContent);
+                newChatMessage.setContent(encryptedMessageContent); // Set the encrypted content
                 newChatMessage.setSender(loggedInUser);
                 newChatMessage.setGroupId(groupId);
                 newChatMessage.setReceiver(receiverUser);
+                newChatMessage.setDecrypted(decrypted);
                 if (receiverUser.equals(loggedInUser)) {
                     // Nếu người nhận là người gửi, đánh dấu là "đã gửi" và "chưa xem"
                     newChatMessage.setSent("đã gửi");
@@ -221,7 +341,7 @@ public String addChat(
             }
         }
     }
-
+    model.addAttribute("decrypted", decrypted);
     return "redirect:/api/messages/" + groupId;
 }
 
