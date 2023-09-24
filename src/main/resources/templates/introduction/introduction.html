@@ -1,35 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Community</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Introduction</title>
+    <th:block th:replace="Layout :: Link-css"></th:block>
+    <style>
+        body {
+            background-image: url('https://img5.thuthuatphanmem.vn/uploads/2021/08/25/hinh-nen-3d-cho-may-tinh-4k_084701936.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* Đặt màu nền cho phần nội dung để nó nổi bật trên hình ảnh nền */
+            padding: 20px;
+            border-radius: 10px;
+        }
+            .contact-details {
+            margin-top: 20px;
+        }
+
+        .contact-details h2 {
+            margin-top: 20px;
+        }
+
+        .contact-details p {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-<header>
-    <h1>Welcome to Our Chat Community</h1>
-</header>
-<main>
-    <section class="introduction">
-        <h2>About Us</h2>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam suscipit justo ac aliquam. Integer nec elit nec eros eleifend tristique. In ultricies odio vel velit tempus, nec euismod felis ullamcorper. Sed eget turpis a nisl hendrerit consequat.
-        </p>
-    </section>
-    <section class="features">
-        <h2>Features</h2>
-        <ul>
-            <li>Real-time Chat</li>
-            <li>Private Messaging</li>
-            <li>Community Forums</li>
-            <li>User Profiles</li>
-            <li>Mobile-Friendly</li>
-        </ul>
-    </section>
-</main>
-<footer>
-    <p>&copy; 2023 Chat Community</p>
-</footer>
+<th:block th:replace="Layout :: header"></th:block>
+<div class="container">
+    <h1>Chào mừng bạn đến với trang chat kết nối cộng đồng!</h1>
+    <p>
+        Trang chat của chúng tôi cung cấp một nơi để bạn kết nối và trò chuyện với người khác trực tuyến.
+        Dưới đây là một số nội quy và chức năng của trang:
+    </p>
+    <h2>Nội quy:</h2>
+    <ul>
+        <li>Luôn tôn trọng và lịch sự trong giao tiếp.</li>
+        <li>Không spam, hoặc vi phạm quyền riêng tư của người khác.</li>
+        <li>...</li> <!-- Thêm nội quy của bạn vào đây -->
+    </ul>
+
+    <h2>Chức năng:</h2>
+    <ul>
+        <li>Chat với người dùng khác.</li>
+        <li>Tạo nhóm chat và tham gia vào chúng.</li>
+        <li>Chia sẻ tệp tin và hình ảnh.</li>
+        <li>Chặn người dùng</li>
+        <li>Quan sát được trạng thái của user</li><!-- Thêm chức năng của bạn vào đây -->
+    </ul>
+    <div class="contact-details">
+        <h2>Thông tin liên hệ</h2>
+        <p><strong>Địa chỉ:</strong> Quận 9, Thành phố Hồ Chí Minh, Việt Nam</p>
+        <p><strong>Số điện thoại:</strong> 1900.63.69.36</p>
+        <p><strong>Email:</strong> vunghia467@gmail.com</p>
+        <p><strong>Facebook:</strong> <a href="https://www.facebook.com">facebook.com</a></p>
+        <p><strong>Instagram:</strong> <a href="https://www.instagram.com">instagram.com</a></p>
+    </div>
+</div>
+<th:block th:replace="Layout :: footer"></th:block>
 </body>
 </html>

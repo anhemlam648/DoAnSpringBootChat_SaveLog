@@ -36,8 +36,10 @@ public class UserController {
     @Autowired
     private EmailService emailService;
     @GetMapping("/login")
-    public String login()
+    public String login(Model model)
     {
+        int onlineUsersCount = (int) userService.countOnlineUsers();
+        model.addAttribute("onlineUsersCount", onlineUsersCount);
         logInfo.info("Người dùng vừa vào trang đăng nhập");
         return "user/login";
     }

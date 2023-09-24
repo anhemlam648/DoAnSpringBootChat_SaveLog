@@ -97,4 +97,9 @@ public void blockUser(Long userId) {
         userRepository.save(user); // Sử dụng phương thức save() để cập nhật hoặc thêm mới người dùng
     }
 
+    public long countOnlineUsers() {
+        List<User> onlineUsers = userRepository.findByOnlineStatus("ONLINE");
+        return onlineUsers.size();
+    }
+
 }

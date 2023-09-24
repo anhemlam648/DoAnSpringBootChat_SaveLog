@@ -22,21 +22,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" href="/books">List Book</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" href="/books/add">Add Book</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" href="/cart">Cart</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" href="/categorys">Category list</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" href="/categorys/addcategory">Add category</a>-->
-<!--                    </li>-->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/introduction">Giới thiệu</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="/show/users">Tài khoản</a>
                     </li>
@@ -46,8 +34,33 @@
                     <li>
                         <a class="nav-link active" href="/groupchat/create">Tạo nhóm</a>
                     </li>
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link active" href="/books">List Book</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link active" href="/books/add">Add Book</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link active" href="/cart">Cart</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link active" href="/categorys">Category list</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link active" href="/categorys/addcategory">Add category</a>-->
+<!--                    </li>-->
                     <li class="nav-item">
                         <a class="nav-link active" href="/otp-verification">Xác thực bổ sung</a>
+                    </li>
+                    <li class="nav-item">
+                    <span class="nav-link active"
+                          style="font-size: 15px; color: #ff6600; cursor: pointer; margin-left: -5px; display: flex; align-items: center;">
+                        <span id="loggedInUsername" style="display: none;"></span>
+                        <span id="onlineIndicator" th:if="${onlineUsersCount > 0}"
+                              style="color: red; margin-left: 3px; order: 1;position: relative; top: -8px;"
+                              th:text="${onlineUsersCount}"></span>
+                        🔔
+                    </span>
                     </li>
                     <li sec:authorize="isAuthenticated()">
                         <form th:action="@{/logout}" method="post">

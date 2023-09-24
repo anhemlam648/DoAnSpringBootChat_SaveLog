@@ -19,7 +19,7 @@ public interface IuserRepository extends JpaRepository<User, Long> {
 //
     @Query("SELECT u FROM User u WHERE u.username = ?1")
     User findByUsername(String username);
-
+    List<User> findByOnlineStatus(String onlineStatus);
 
 //    @Modifying
 //    @Transactional

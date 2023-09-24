@@ -26,6 +26,8 @@ public class ShowUserController {
 
     @GetMapping("/users")
     public String userList(Model model) {
+        int onlineUsersCount = (int) userService.countOnlineUsers();
+        model.addAttribute("onlineUsersCount", onlineUsersCount);
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "/user/list";

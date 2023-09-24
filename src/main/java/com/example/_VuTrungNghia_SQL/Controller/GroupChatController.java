@@ -8,6 +8,7 @@ import com.example._VuTrungNghia_SQL.repository.IuserRepository;
 import com.example._VuTrungNghia_SQL.repository.MemberRepository;
 import com.example._VuTrungNghia_SQL.services.GroupSevice;
 import com.example._VuTrungNghia_SQL.services.MemberSevice;
+import com.example._VuTrungNghia_SQL.services.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,8 @@ public class GroupChatController {
 
     @Autowired
     private MemberSevice memberSevice;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private IuserRepository userRepository;
     @Autowired
@@ -44,6 +46,8 @@ public class GroupChatController {
 
     @GetMapping("/list")
     public String listGroupChats(Model model) {
+        int onlineUsersCount = (int) userService.countOnlineUsers();
+        model.addAttribute("onlineUsersCount", onlineUsersCount);
         List<GroupChat> groupChats = groupChatRepository.findAll();
         model.addAttribute("groupChats", groupChats);
         return "groupchat/list";
