@@ -1,0 +1,5 @@
+2023-09-24 11:52:51,144 [http-nio-8080-exec-2] INFO  c.e._.Controller.UserController - Người dùng vừa vào trang đăng nhập
+2023-09-24 11:52:52,517 [http-nio-8080-exec-5] INFO  c.e._.Controller.UserController - Người dùng vừa vào trang đăng nhập
+2023-09-24 11:53:16,860 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-24 11:53:16,862 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2023-09-24 11:53:18,562 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

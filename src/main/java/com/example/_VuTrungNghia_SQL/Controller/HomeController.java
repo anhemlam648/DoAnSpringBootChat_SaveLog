@@ -18,17 +18,14 @@ public class HomeController {
     @Autowired
     private UserService userService; // Đảm bảo bạn đã inject UserService
 
-//    @GetMapping
-//    public String home(Model model){
-//        int onlineUsersCount = (int) userService.countOnlineUsers();
-//        model.addAttribute("onlineUsersCount", onlineUsersCount);
-//        return "home/index";
-//    }
-
     @GetMapping
-    public String home(){
+    public String home(Model model){
+        int onlineUsersCount = (int) userService.countOnlineUsers();
+        model.addAttribute("onlineUsersCount", onlineUsersCount);
         return "home/index";
     }
+
+
 
 
 }
