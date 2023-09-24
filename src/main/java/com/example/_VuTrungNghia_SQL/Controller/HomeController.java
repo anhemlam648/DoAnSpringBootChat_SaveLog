@@ -27,8 +27,8 @@ public class HomeController {
 
     @GetMapping
     public String home(Model model){
-//        int onlineUsersCount = (int) userService.countOnlineUsers();
-//        model.addAttribute("onlineUsersCount", onlineUsersCount);
+        int onlineUsersCount = (int) userService.countOnlineUsers();
+        model.addAttribute("onlineUsersCount", onlineUsersCount);
         return "home/index";
     }
 
