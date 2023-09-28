@@ -1,5 +1,41 @@
-2023-09-24 11:52:51,144 [http-nio-8080-exec-2] INFO  c.e._.Controller.UserController - Người dùng vừa vào trang đăng nhập
-2023-09-24 11:52:52,517 [http-nio-8080-exec-5] INFO  c.e._.Controller.UserController - Người dùng vừa vào trang đăng nhập
-2023-09-24 11:53:16,860 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2023-09-24 11:53:16,862 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2023-09-24 11:53:18,562 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2023-09-24 12:04:26,567 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-24 12:04:26,571 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2023-09-24 12:04:28,213 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2023-09-24 12:05:19,827 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.0.Final
+2023-09-24 12:05:19,865 [restartedMain] INFO  c.e._VuTrungNghia_SQL.Application - Starting Application using Java 20.0.1 with PID 13200 (D:\DoAnCuoiLTMT\DoAnLTMMT\target\classes started by Vu Nghia in D:\DoAnCuoiLTMT\DoAnLTMMT)
+2023-09-24 12:05:19,867 [restartedMain] INFO  c.e._VuTrungNghia_SQL.Application - No active profile set, falling back to 1 default profile: "default"
+2023-09-24 12:05:19,906 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-09-24 12:05:19,906 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-09-24 12:05:20,676 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-24 12:05:20,743 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 60 ms. Found 6 JPA repository interfaces.
+2023-09-24 12:05:21,484 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2023-09-24 12:05:21,494 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2023-09-24 12:05:21,495 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2023-09-24 12:05:21,495 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.8]
+2023-09-24 12:05:21,565 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2023-09-24 12:05:21,566 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1659 ms
+2023-09-24 12:05:21,643 [restartedMain] WARN  o.a.c.c.C.[Tomcat].[localhost].[/] - Cannot deserialize session attribute [SPRING_SECURITY_CONTEXT] for session [F087E13AAB85FEF92BDED7B1C68F0A6C]
+2023-09-24 12:05:21,772 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-09-24 12:05:21,830 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.1.7.Final
+2023-09-24 12:05:22,064 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2023-09-24 12:05:22,550 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@28158f10
+2023-09-24 12:05:22,552 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2023-09-24 12:05:22,619 [restartedMain] INFO  SQL dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2023-09-24 12:05:23,619 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-09-24 12:05:23,626 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-24 12:05:24,416 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-24 12:05:24,695 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7d42a3cf, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@41c2afed, org.springframework.security.web.context.SecurityContextHolderFilter@17448dda, org.springframework.security.web.header.HeaderWriterFilter@6fcf654e, org.springframework.security.web.authentication.logout.LogoutFilter@1654bc45, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@1a264c53, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5e333a67, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@63e95c92, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@5ff85c0f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5cc79bfe, org.springframework.security.web.access.ExceptionTranslationFilter@657e56ec, org.springframework.security.web.access.intercept.AuthorizationFilter@4409daaf]
+2023-09-24 12:05:24,919 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2023-09-24 12:05:24,935 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2023-09-24 12:05:24,956 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2023-09-24 12:05:24,968 [restartedMain] INFO  c.e._VuTrungNghia_SQL.Application - Started Application in 5.432 seconds (process running for 5.988)
+2023-09-24 12:05:31,646 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-24 12:05:31,646 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2023-09-24 12:05:31,648 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2023-09-24 12:05:31,872 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][home/index] Deprecated unwrapped fragment expression "Layout :: Link-css" found in template home/index, line 6, col 15. Please use the complete syntax of fragment expressions instead ("~{Layout :: Link-css}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2023-09-24 12:05:31,939 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][home/index] Deprecated unwrapped fragment expression "Layout :: header" found in template home/index, line 9, col 11. Please use the complete syntax of fragment expressions instead ("~{Layout :: header}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2023-09-24 12:05:31,967 [http-nio-8080-exec-2] WARN  o.t.s.p.AbstractStandardFragmentInsertionTagProcessor - [THYMELEAF][http-nio-8080-exec-2][home/index] Deprecated unwrapped fragment expression "Layout :: footer" found in template home/index, line 22, col 11. Please use the complete syntax of fragment expressions instead ("~{Layout :: footer}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2023-09-24 12:05:33,044 [http-nio-8080-exec-5] INFO  c.e._.Controller.UserController - Người dùng vừa vào trang đăng nhập
+2023-09-24 12:06:35,574 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-24 12:06:35,577 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2023-09-24 12:06:35,583 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
